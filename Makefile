@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: storck <storck@student.42.fr>              +#+  +:+       +#+         #
+#    By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/29 11:43:10 by gwen              #+#    #+#              #
-#    Updated: 2026/05/29 11:51:03 by storck           ###   ########.fr        #
+#    Updated: 2026/05/29 15:46:52 by gwen             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,20 +17,17 @@ RM = rm -rf
 FLAGS = -Wall -Werror -Wextra -g -std=c++98
 
 SRC_DIR = src/
-SRC = main.c \
-	Client.cpp \
-	Server.cpp \
-	Channel.cpp
+SRC = main.cpp
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 
 OBJ_DIR = obj/
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:.cpp=.o)
 OBJS = $(addprefix $(OBJ_DIR), $(OBJ))
 
 all: $(NAME)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(dir $@)
 	@$(CC) $(FLAGS) -c $< -o $@ $(INC)
 
