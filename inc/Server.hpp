@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 15:12:11 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 15:32:38 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Server
 
     public:
         Server( void );
+        Server( const int& port, const std::string& password);
         Server( Server const & other );
         Server& operator=( Server const & other );
         ~Server( void );

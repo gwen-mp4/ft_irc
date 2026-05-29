@@ -6,13 +6,27 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 15:19:42 by gwen             ###   ########.fr       */
+/*   Updated: 2026/05/29 15:37:48 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Include.hpp"
 
-Server::Server( void ) {}
+Server::Server( void ) :
+    _port(-1),
+    _socket(-1),
+    _signal(false),
+    _clientNb(0),
+    _clients(NULL),
+    _servPassword("") {}
+    
+Server::Server( const int& port, const std::string& password) :
+    _port(port), 
+    _socket(-1),
+    _signal(false),
+    _clientNb(0),
+    _clients(NULL),
+    _servPassword(password) {}
 
 Server::Server( Server const & other )
 {
@@ -26,7 +40,7 @@ Server& Server::operator=( Server const & other )
         this->_port = other._port;
         this->_signal = other._signal;
         this->_socket = other._socket;
-        for (int i = 0; i < other._clientNb; i++)
+        for (int i = 0; i < other._clientNb; ++i)
         {
             this->_clients.push_back(other._clients[i]);
         }
@@ -36,7 +50,7 @@ Server& Server::operator=( Server const & other )
 
 Server::~Server( void )
 {
-    for (int i = 0; i < this->_clientNb; i++)
+    for (int i = 0; i < this->_clientNb; ++i)
     {
         delete this->_clients[i];
     }
