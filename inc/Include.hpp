@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Include.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:59:07 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 15:28:39 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 15:39:36 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef INCLUDE_HPP
 #define INCLUDE_HPP
 
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <sys/socket.h>
