@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 16:46:09 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 17:56:26 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,15 @@ void    Server::setServPassword( std::string pswd )
 
 void    Server::run( void )
 {
+    int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+
+    sockaddr_in serverAddress;
+
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(this->_port);
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
+
+    bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
     while (true)
     {
         
