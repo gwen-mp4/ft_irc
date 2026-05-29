@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:05 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 12:41:07 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 13:00:07 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@
 class Channel
 {
     private:
-        bool                _inviteOnly;
-        bool                _topicRestr;
-        bool                _userLimited;
-        int                 _limit;
-        std::string         _password;
-        std::string         _topic;
-        std::vector<Client> _operators;
+        bool                    _inviteOnly;
+        bool                    _topicRestr;
+        bool                    _userLimited;
+        int                     _limit;
+        std::string             _password;
+        std::string             _topic;
+        int                     _nbOp;
+        std::vector<Client*>    _operators;
 
     public:
         Channel( void );
@@ -38,7 +39,7 @@ class Channel
         bool        getUserLimited( void ) const;
         int         getLimit( void ) const;
         std::string getPassword( void ) const;
-        std::string getTpoic( void ) const;
+        std::string getTopic( void ) const;
 
         //Setter
         void    setInviteMode( bool mod );
