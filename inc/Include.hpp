@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:59:07 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 12:39:04 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 15:28:39 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,9 @@
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
+
+#ifndef PORT_MAX
+# define PORT_MAX 65535
+#endif
 
 #endif
