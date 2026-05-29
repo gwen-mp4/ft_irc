@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:34 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 16:04:18 by gwen             ###   ########.fr       */
+/*   Updated: 2026/05/29 16:19:13 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	parsePort( const std::string& portInput )
 }
 
 int	main(int ac, char **av) {
-	if (ac != 2)
+	if (ac != 3)
 		return std::cerr << "Usage: ./ircserv <port> <password>\n", 1;
 	try {
 		int	port = parsePort(av[1]);

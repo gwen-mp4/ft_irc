@@ -3,16 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:23 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 13:09:28 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 16:15:17 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Include.hpp"
 
-Channel::Channel( void ) {}
+Channel::Channel( void ) :
+    _inviteOnly(false),
+    _topicRestr(false),
+    _userLimited(false),
+    _limit(0),
+    _password(NULL),
+    _topic(NULL),
+    _nbOp(0),
+    _operators(NULL) {}
 
 Channel::Channel( Channel const & other )
 {
@@ -30,7 +38,7 @@ Channel& Channel::operator=( Channel const & other )
         this->_password = other._password;
         this->_topic = other._topic;
         this->_nbOp = other._nbOp;
-        for (int i = 0; i < other._nbOp; i++)
+        for (int i = 0; i < other._nbOp; ++i)
         {
             this->_operators.push_back(other._operators[i]);
         }
@@ -40,7 +48,7 @@ Channel& Channel::operator=( Channel const & other )
 
 Channel::~Channel( void )
 {
-    for (int i = 0; i < this->_nbOp; i++)
+    for (int i = 0; i < this->_nbOp; ++i)
     {
         delete this->_operators[i];
     }

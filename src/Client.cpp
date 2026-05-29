@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 13:16:09 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 16:15:36 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Include.hpp"
 
-Client::Client( void ) {}
+Client::Client( void ) :
+    _username(NULL),
+    _nickname(NULL),
+    _clientIpAddr(NULL),
+    _clientFd(-1) {}
 
-Client::Client( std::string name )
-{
-    this->_username = name;
-}
+Client::Client( const std::string& name, const std::string& nick ) : _username(name), _nickname(nick) {}
 
 Client::Client( Client const & other )
 {
@@ -29,7 +30,7 @@ Client& Client::operator=( Client const & other )
     if (this != &other)
     {
         this->_clientFd = other._clientFd;
-        this->_clientIPadd = other._clientIPadd;
+        this->_clientIpAddr = other._clientIpAddr;
         this->_nickname = other._nickname;
         this->_username = other._username;
     }
@@ -53,7 +54,7 @@ std::string Client::getNickname( void ) const
 
 std::string Client::getclientIP( void ) const
 {
-    return this->_clientIPadd;
+    return this->_clientIpAddr;
 }
 
 int         Client::getClientFd( void ) const
@@ -76,7 +77,7 @@ void    Client::setNickname( std::string nickname )
 
 void    Client::setclientIP( std::string clientIP )
 {
-    this->_clientIPadd = clientIP;
+    this->_clientIpAddr = clientIP;
 }
 
 void    Client::setClientFd( int fd )

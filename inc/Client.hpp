@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 14:52:14 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 16:10:50 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ class Client
     protected:
         std::string _username;
         std::string _nickname;
-        std::string _clientIPadd;
+        std::string _clientIpAddr;
         int         _clientFd;
 
     public:
         Client( void );
-        Client( std::string name );
+        Client( const std::string& name, const std::string& nick );
         Client( Client const & other );
         Client& operator=( Client const & other );
         ~Client( void );

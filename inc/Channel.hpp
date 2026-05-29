@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:05 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 15:09:55 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 16:14:11 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class Channel
         bool                    _inviteOnly;
         bool                    _topicRestr;
         bool                    _userLimited;
-        int                     _limit;
+        unsigned int            _limit;
         std::string             _password;
         std::string             _topic;
         unsigned int            _nbOp;
