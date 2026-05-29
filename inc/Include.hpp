@@ -12,4 +12,8 @@
 #include <poll.h>
 #include <csignal>
 
+#include "Channel.hpp"
+#include "Client.hpp"
+#include "Server.hpp"
+
 #endif
