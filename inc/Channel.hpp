@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:05 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 16:14:11 by gwen             ###   ########.fr       */
+/*   Updated: 2026/05/29 16:27:50 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define CHANNEL_HPP
 
 #include "Include.hpp"
+
+class Client;
 
 class Channel
 {

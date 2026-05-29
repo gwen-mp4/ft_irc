@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:23 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 16:15:17 by gwen             ###   ########.fr       */
+/*   Updated: 2026/05/29 16:45:16 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ Channel::Channel( void ) :
     _limit(0),
     _password(NULL),
     _topic(NULL),
-    _nbOp(0),
-    _operators(NULL) {}
+    _nbOp(0) {}
+    //_operators(NULL) {}
 
 Channel::Channel( Channel const & other )
 {
@@ -38,7 +38,7 @@ Channel& Channel::operator=( Channel const & other )
         this->_password = other._password;
         this->_topic = other._topic;
         this->_nbOp = other._nbOp;
-        for (int i = 0; i < other._nbOp; ++i)
+        for (unsigned int i = 0; i < other._nbOp; ++i)
         {
             this->_operators.push_back(other._operators[i]);
         }
@@ -48,7 +48,7 @@ Channel& Channel::operator=( Channel const & other )
 
 Channel::~Channel( void )
 {
-    for (int i = 0; i < this->_nbOp; ++i)
+    for (unsigned int i = 0; i < this->_nbOp; ++i)
     {
         delete this->_operators[i];
     }

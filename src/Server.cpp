@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 16:01:23 by gwen             ###   ########.fr       */
+/*   Updated: 2026/05/29 16:46:09 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Server::Server( void ) :
     _socket(-1),
     _signal(false),
     _clientNb(0),
-    _clients(NULL),
+    //_clients(NULL),
     _servPassword("") {}
     
 Server::Server( const int& port, const std::string& password) :
@@ -25,7 +25,7 @@ Server::Server( const int& port, const std::string& password) :
     _socket(-1),
     _signal(false),
     _clientNb(0),
-    _clients(NULL),
+    //_clients(NULL),
     _servPassword(password) {}
 
 Server::Server( Server const & other )
@@ -40,7 +40,7 @@ Server& Server::operator=( Server const & other )
         this->_port = other._port;
         this->_signal = other._signal;
         this->_socket = other._socket;
-        for (int i = 0; i < other._clientNb; ++i)
+        for (unsigned int i = 0; i < other._clientNb; ++i)
         {
             this->_clients.push_back(other._clients[i]);
         }
@@ -50,7 +50,7 @@ Server& Server::operator=( Server const & other )
 
 Server::~Server( void )
 {
-    for (int i = 0; i < this->_clientNb; ++i)
+    for (unsigned int i = 0; i < this->_clientNb; ++i)
     {
         delete this->_clients[i];
     }
