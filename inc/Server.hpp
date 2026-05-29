@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 14:02:41 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 15:12:11 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ class Server
         int                     _port;
         int                     _socket;
         bool                    _signal;
-        int                     _clientNb;
+        unsigned int            _clientNb;
         std::vector<Client*>    _clients;
+        std::string             _servPassword;
 
     public:
         Server( void );
@@ -31,15 +32,19 @@ class Server
         ~Server( void );
 
         //Getter:
-        int     getport( void ) const;
-        int     getSocket( void ) const;
-        bool    getSignal( void ) const;
-        Client* getClient( int index ) const;
+        int         getport( void ) const;
+        int         getSocket( void ) const;
+        bool        getSignal( void ) const;
+        Client*     getClient( int index ) const;
+        std::string getServPassword( void ) const;
 
         //Setter
         void    setport( int por );
         void    setSocket( int soc );
         void    setSignal( bool sig );
+        void    setServPassword( std::string );
+
+        void    run( void );
         
 };
 

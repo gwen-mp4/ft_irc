@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 12:41:13 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 14:52:14 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 class Client
 {
-    private:
+    protected:
         std::string _username;
         std::string _nickname;
         std::string _clientIPadd;
@@ -42,6 +42,14 @@ class Client
         void    setclientIP( std::string clientIP );
         void    setClientFd( int fd );
 
+};
+
+class Operator: public Client
+{
+    private:
+
+    public:
+    
 };
 
 #endif

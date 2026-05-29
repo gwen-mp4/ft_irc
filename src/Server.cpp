@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 14:05:48 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 15:13:51 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ Client* Server::getClient( int index ) const
     return this->_clients[index];
 }
 
+std::string Server::getServPassword( void ) const
+{
+    return this->_servPassword;
+}
+
 
 /* ---------- Setter ---------- */
 
@@ -81,4 +86,18 @@ void    Server::setSocket( int soc )
 void    Server::setSignal( bool sig )
 {
     this->_signal = sig;
+}
+
+void    Server::setServPassword( std::string pswd )
+{
+    this->_servPassword = pswd;
+}
+
+
+void    Server::run( void )
+{
+    while (true)
+    {
+        
+    }
 }

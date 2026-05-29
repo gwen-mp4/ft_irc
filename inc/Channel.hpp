@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:05 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 13:00:07 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 15:09:55 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Channel
         int                     _limit;
         std::string             _password;
         std::string             _topic;
-        int                     _nbOp;
+        unsigned int            _nbOp;
         std::vector<Client*>    _operators;
 
     public:
