@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Include.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@learner.42.tech>                +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:59:07 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 11:59:08 by gwen             ###   ########.fr       */
+/*   Updated: 2026/05/29 12:39:04 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,9 @@
 #include <poll.h>
 #include <csignal>
 #include <exception>
+
+#include "Channel.hpp"
+#include "Client.hpp"
+#include "Server.hpp"
 
 #endif
