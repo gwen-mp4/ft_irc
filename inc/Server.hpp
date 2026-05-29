@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 12:41:20 by storck           ###   ########.fr       */
+/*   Updated: 2026/05/29 14:02:41 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 class Server
 {
     private:
-        int                 _port;
-        int                 _socket;
-        bool                _signal;
-        std::vector<Client> _clients;
+        int                     _port;
+        int                     _socket;
+        bool                    _signal;
+        int                     _clientNb;
+        std::vector<Client*>    _clients;
 
     public:
         Server( void );
@@ -33,6 +34,7 @@ class Server
         int     getport( void ) const;
         int     getSocket( void ) const;
         bool    getSignal( void ) const;
+        Client* getClient( int index ) const;
 
         //Setter
         void    setport( int por );
