@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+         #
+#    By: storck <storck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/29 11:43:10 by gwen              #+#    #+#              #
-#    Updated: 2026/05/29 11:45:47 by gwen             ###   ########.fr        #
+#    Updated: 2026/05/29 11:51:03 by storck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ FLAGS = -Wall -Werror -Wextra -g -std=c++98
 SRC_DIR = src/
 SRC = main.c \
 	Client.cpp \
-	Server.cpp
+	Server.cpp \
+	Channel.cpp
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC))
 
