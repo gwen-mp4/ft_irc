@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 10:49:44 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 10:55:31 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,17 +99,33 @@ Server::~Server( void )
 
 void    Server::run( void )
 {
+    std::cout << "Running Server" << std::endl;
+
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     sockaddr_in serverAddress;
-
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(this->_port);
     serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-    bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
-    while (true)
-    {
+    bind(serverSocket, (struct sockaddr*)&serverAddress,
+         sizeof(serverAddress));
+
+    listen(serverSocket, 5);
+
+    int clientSocket
+        = accept(serverSocket, NULL, NULL);
+
+    char buffer[1024] = { 0 };
+    recv(clientSocket, buffer, sizeof(buffer), 0);
+    std::cout << "Message from client: " << buffer
+              << std::endl;
+
+    close(serverSocket);
+    std::cout << "Closing Server" << std::endl;
+
+    // while (true)
+    // {
         
-    }
+    // }
 }
