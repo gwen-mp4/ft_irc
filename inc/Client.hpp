@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 16:10:50 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 10:39:39 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ class Client
         void    setNickname( std::string nickname );
         void    setclientIP( std::string clientIP );
         void    setClientFd( int fd );
+
+        void    run( void );
 
 };
 
