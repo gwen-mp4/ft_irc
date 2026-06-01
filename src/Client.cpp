@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 10:43:52 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 12:51:37 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,26 +77,4 @@ Client::~Client( void ) {}
 void    Client::setClientFd( int fd )
 {
     this->_clientFd = fd;
-}
-
-
-void    Client::run( void )
-{
-    std::cout << "Running client" << std::endl;
-
-    int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-
-    sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_port = htons(8080);
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
-
-    connect(clientSocket, (struct sockaddr*)&serverAddress,
-            sizeof(serverAddress));
-
-    const char* message = "Hello, server!";
-    send(clientSocket, message, 14, 0);
-
-    close(clientSocket);
-    std::cout << "Closing client" << std::endl;
 }

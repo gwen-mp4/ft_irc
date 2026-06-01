@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 10:39:39 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 12:51:42 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ class Client
         void    setNickname( std::string nickname );
         void    setclientIP( std::string clientIP );
         void    setClientFd( int fd );
-
-        void    run( void );
 
 };
 
