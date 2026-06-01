@@ -3,29 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 17:56:26 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 10:49:44 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Include.hpp"
-
-Server::Server( void ) :
-    _port(-1),
-    _socket(-1),
-    _signal(false),
-    _clientNb(0),
-    //_clients(NULL),
-    _servPassword("") {}
     
 Server::Server( const int& port, const std::string& password) :
     _port(port), 
     _socket(-1),
     _signal(false),
     _clientNb(0),
-    //_clients(NULL),
     _servPassword(password) {}
 
 Server::Server( Server const & other )
@@ -40,72 +31,70 @@ Server& Server::operator=( Server const & other )
         this->_port = other._port;
         this->_signal = other._signal;
         this->_socket = other._socket;
-        for (unsigned int i = 0; i < other._clientNb; ++i)
-        {
-            this->_clients.push_back(other._clients[i]);
-        }
+        this->_clients = other._clients;
     }
     return (*this);
 }
 
 Server::~Server( void )
 {
-    for (unsigned int i = 0; i < this->_clientNb; ++i)
-    {
-        delete this->_clients[i];
-    }
+    // Don't need to delete because a container frees itself when destructor is called
+    // for (unsigned int i = 0; i < this->_clientNb; ++i)
+    // {
+    //     delete this->_clients[i];
+    // }
 }
 
 
-/* ---------- Getter ---------- */
+// /* ---------- Getter ---------- */
 
-int     Server::getport( void ) const
-{
-    return this->_port;
-}
+// int Server::getport(void) const
+// {
+//     return this->_port;
+// }
 
-int     Server::getSocket( void ) const
-{
-    return this->_socket;
-}
+// int Server::getSocket(void) const
+// {
+//     return this->_socket;
+// }
 
-bool    Server::getSignal( void ) const
-{
-    return this->_signal;
-}
+// bool Server::getSignal(void) const
+// {
+//     return this->_signal;
+// }
 
-Client* Server::getClient( int index ) const
-{
-    return this->_clients[index];
-}
+// Client *Server::getClient(int index) const
+// {
+//     return this->_clients[index];
+// }
 
-std::string Server::getServPassword( void ) const
-{
-    return this->_servPassword;
-}
+// std::string Server::getServPassword( void ) const
+// {
+//     return this->_servPassword;
+// }
 
 
-/* ---------- Setter ---------- */
+// /* ---------- Setter ---------- */
 
-void    Server::setport( int por )
-{
-    this->_port = por;
-}
+// void    Server::setport( int por )
+// {
+//     this->_port = por;
+// }
 
-void    Server::setSocket( int soc )
-{
-    this->_socket = soc;
-}
+// void    Server::setSocket( int soc )
+// {
+//     this->_socket = soc;
+// }
 
-void    Server::setSignal( bool sig )
-{
-    this->_signal = sig;
-}
+// void    Server::setSignal( bool sig )
+// {
+//     this->_signal = sig;
+// }
 
-void    Server::setServPassword( std::string pswd )
-{
-    this->_servPassword = pswd;
-}
+// void    Server::setServPassword( std::string pswd )
+// {
+//     this->_servPassword = pswd;
+// }
 
 
 void    Server::run( void )

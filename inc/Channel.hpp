@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:05 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 16:27:50 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 10:44:15 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,30 @@ class Channel
         std::string             _password;
         std::string             _topic;
         unsigned int            _nbOp;
-        std::vector<Client*>    _operators;
+        std::map<int, Client*>    _operators; // Using map for optimization with an int (FD) and pointer to Client
 
     public:
-        Channel( void );
+        Channel( void ); // To change with something else with constructor with parameters instead of default constructor
         Channel( Channel const & other );
         Channel& operator=( Channel const & other );
         ~Channel( void );
 
-        //Getter:
-        bool        getInviteMode( void ) const;
-        bool        getTopicRestr( void ) const;
-        bool        getUserLimited( void ) const;
-        int         getLimit( void ) const;
-        std::string getPassword( void ) const;
-        std::string getTopic( void ) const;
+        // For now, we don't need it or won't need it for later
+        // //Getter:
+        // bool        getInviteMode( void ) const;
+        // bool        getTopicRestr( void ) const;
+        // bool        getUserLimited( void ) const;
+        // int         getLimit( void ) const;
+        // std::string getPassword( void ) const;
+        // std::string getTopic( void ) const;
 
-        //Setter
-        void    setInviteMode( bool mod );
-        void    setTopicRestr( bool res );
-        void    setUserLimited( bool lim );
-        void    setLimit( int lim );
-        void    setPassword( std::string newPassW );
-        void    setTpoic( std::string newTopic );
+        // //Setter
+        // void    setInviteMode( bool mod );
+        // void    setTopicRestr( bool res );
+        // void    setUserLimited( bool lim );
+        // void    setLimit( int lim );
+        // void    setPassword( std::string newPassW );
+        // void    setTpoic( std::string newTopic );
 
 };
 

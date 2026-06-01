@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/05/29 17:31:41 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 10:42:23 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,28 @@ class Server
         int                     _socket;
         bool                    _signal;
         unsigned int            _clientNb;
-        std::vector<Client*>    _clients;
+        std::map<int, Client*>    _clients; // Using map for optimization with an int (FD) and pointer to Client
         std::string             _servPassword;
 
     public:
-        Server( void );
         Server( const int& port, const std::string& password);
         Server( Server const & other );
         Server& operator=( Server const & other );
         ~Server( void );
 
-        //Getter:
-        int         getport( void ) const;
-        int         getSocket( void ) const;
-        bool        getSignal( void ) const;
-        Client*     getClient( int index ) const;
-        std::string getServPassword( void ) const;
+        // For now, we don't need it or won't need it for later
+        // //Getter:
+        // int         getport( void ) const;
+        // int         getSocket( void ) const;
+        // bool        getSignal( void ) const;
+        // Client*     getClient( int index ) const;
+        // std::string getServPassword( void ) const;
 
-        //Setter
-        void    setport( int por );
-        void    setSocket( int soc );
-        void    setSignal( bool sig );
-        void    setServPassword( std::string );
+        // //Setter
+        // void    setport( int por );
+        // void    setSocket( int soc );
+        // void    setSignal( bool sig );
+        // void    setServPassword( std::string );
 
         void    run( void );
         

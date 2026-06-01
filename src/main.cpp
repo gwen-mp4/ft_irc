@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:34 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 16:40:42 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 10:49:18 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static int	parsePort( const std::string& portInput )
 	int	portValue;
 	if (iss >> portValue && iss.eof()) {
 		if (portValue < 0 || portValue > PORT_MAX) {
-			throw std::runtime_error("wrong port");
+			throw std::runtime_error("invalid port");
 		}
 	}
 	else
-		throw std::runtime_error("wrong port");
+		throw std::runtime_error("invalid port");
 	return portValue;
 }
 

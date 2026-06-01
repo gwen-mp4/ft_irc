@@ -6,17 +6,11 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/05/29 16:15:36 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 10:43:04 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Include.hpp"
-
-Client::Client( void ) :
-    _username(NULL),
-    _nickname(NULL),
-    _clientIpAddr(NULL),
-    _clientFd(-1) {}
 
 Client::Client( const std::string& name, const std::string& nick ) : _username(name), _nickname(nick) {}
 
@@ -42,45 +36,45 @@ Client::~Client( void ) {}
 
 /* ---------- Getter ---------- */
 
-std::string Client::getUsername( void ) const
-{
-    return this->_username;
-}
+// std::string Client::getUsername( void ) const
+// {
+//     return this->_username;
+// }
 
-std::string Client::getNickname( void ) const
-{
-    return this->_nickname;
-}
+// std::string Client::getNickname( void ) const
+// {
+//     return this->_nickname;
+// }
 
-std::string Client::getclientIP( void ) const
-{
-    return this->_clientIpAddr;
-}
+// std::string Client::getclientIP( void ) const
+// {
+//     return this->_clientIpAddr;
+// }
 
-int         Client::getClientFd( void ) const
-{
-    return this->_clientFd;
-}
+// int         Client::getClientFd( void ) const
+// {
+//     return this->_clientFd;
+// }
 
 
-/* ---------- Setter ---------- */
+// /* ---------- Setter ---------- */
 
-void    Client::setUsername( std::string username )
-{
-    this->_username = username;
-}
+// void    Client::setUsername( std::string username )
+// {
+//     this->_username = username;
+// }
 
-void    Client::setNickname( std::string nickname )
-{
-    this->_nickname = nickname;
-}
+// void    Client::setNickname( std::string nickname )
+// {
+//     this->_nickname = nickname;
+// }
 
-void    Client::setclientIP( std::string clientIP )
-{
-    this->_clientIpAddr = clientIP;
-}
+// void    Client::setclientIP( std::string clientIP )
+// {
+//     this->_clientIpAddr = clientIP;
+// }
 
-void    Client::setClientFd( int fd )
-{
-    this->_clientFd = fd;
-}
+// void    Client::setClientFd( int fd )
+// {
+//     this->_clientFd = fd;
+// }
