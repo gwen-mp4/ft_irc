@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 12:51:42 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 14:05:49 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ class Client
         std::string _nickname;
         std::string _clientIpAddr;
         int         _clientFd;
+        
+        bool    hasEnteredPass;
+        bool    hasGivenNick;
+        bool    hasGivenUser;
+        bool    isRegistered; // Is true when all 3 above are true
 
     public:
         Client( const std::string& name, const std::string& nick );

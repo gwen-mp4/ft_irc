@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 12:20:06 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 14:07:23 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,21 @@ Server::Server( const int& port, const std::string& password) :
     _socket(-1),
     _signal(false),
     _clientNb(0),
-    _servPassword(password) {}
+    _servPassword(password) {
+    
+    _cmds["NICK"] = &Server::_handleNick;
+    _cmds["PASS"] = &Server::_handlePass;
+    _cmds["USER"] = &Server::_handleUser;
+    _cmds["OPER"] = &Server::_handleOper;
+    _cmds["MODE"] = &Server::_handleMode;
+    _cmds["QUIT"] = &Server::_handleQuit;
+    _cmds["JOIN"] = &Server::_handleJoin;
+    _cmds["PART"] = &Server::_handlePart;
+    _cmds["TOPIC"] = &Server::_handleTopic;
+    _cmds["KICK"] = &Server::_handleKick;
+    _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
+    _cmds["NOTICE"] = &Server::_handleNotice;
+}
 
 Server::Server( Server const & other )
 {
