@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 11:16:12 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 15:10:21 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 16:13:02 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Command {
 
 		std::string	getPrefix() const;
 		std::string	getCommand() const;
+		std::string	getCommandUpcase() const;
 		std::vector<std::string>	getParams() const;
 };
 

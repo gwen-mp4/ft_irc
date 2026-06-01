@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 11:15:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 15:24:13 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 16:13:39 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,12 @@ std::string Command::getPrefix() const {
 	return _prefix;
 }
 
-std::string Command::getCommand() const {
+// For error
+std::string	Command::getCommand() const {
+	return _command;
+}
+
+std::string Command::getCommandUpcase() const {
 	std::string	uppercaseCmd = "";
 	for (size_t i = 0; i < _command.length(); ++i) {
 		if (std::islower(_command.at(i)))

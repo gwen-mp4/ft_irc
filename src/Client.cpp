@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 12:51:37 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 15:42:29 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,14 @@ Client::~Client( void ) {}
 //     return this->_clientIpAddr;
 // }
 
-// int         Client::getClientFd( void ) const
-// {
-//     return this->_clientFd;
-// }
+int         Client::getClientFd( void ) const
+{
+    return this->_clientFd;
+}
+
+bool    Client::isRegistered() const {
+    return _isRegistered;
+}
 
 
 // /* ---------- Setter ---------- */
