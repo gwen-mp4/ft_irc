@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 10:55:31 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 12:20:06 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,13 @@ Server::~Server( void )
 
 void    Server::run( void )
 {
-    std::cout << "Running Server" << std::endl;
-
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+
+    char buffer[80];
+    int on = 1, clientSocket = -1, len = 1;
+    int compres_array = 0;
+    int close_conn;
+    int reServSock = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&on, sizeof(on));
 
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
@@ -111,18 +115,130 @@ void    Server::run( void )
     bind(serverSocket, (struct sockaddr*)&serverAddress,
          sizeof(serverAddress));
 
-    listen(serverSocket, 5);
+    reServSock = listen(serverSocket, 32);
 
-    int clientSocket
-        = accept(serverSocket, NULL, NULL);
+    struct pollfd fds[200];
+    int nfds = 1, current_size = 0;
+    fds[0].fd = serverSocket;
+    fds[0].events = POLLIN;
 
-    char buffer[1024] = { 0 };
-    recv(clientSocket, buffer, sizeof(buffer), 0);
-    std::cout << "Message from client: " << buffer
-              << std::endl;
+    do {
+        std::cout << "Waiting on poll()..." << std::endl;
+        reServSock = poll(fds, nfds, 180000);
 
-    close(serverSocket);
-    std::cout << "Closing Server" << std::endl;
+        if (reServSock == 0)
+        {
+            std::cout << "poll() time out. End program." << std::endl;
+            break;
+        }
+
+        current_size = nfds;
+        for (int i = 0; i < current_size; i++)
+        {
+            if (fds[i].revents == 0)
+                continue;
+            if (fds[i].revents != POLLIN)
+            {
+                std::cerr << "Error! revents = " << fds[i].revents << std::endl;
+                this->_signal = true;
+                break;
+            }
+            if (fds[i].fd == serverSocket)
+            {
+                std::cout << "Listening socket is readable." << std::endl;
+
+                do {
+                    clientSocket = accept(serverSocket, NULL, NULL);
+                    if (clientSocket < 0)
+                    {
+                        if (errno != EWOULDBLOCK)
+                        {
+                          //perror("  accept() failed");
+                          this->_signal = true;
+                        }
+                        break;
+                    }
+
+                    std::cout << "New incoming connection - " << clientSocket << std::endl;
+                    fds[nfds].fd = clientSocket;
+                    fds[nfds].events = POLLIN;
+                    nfds++;
+                } while (clientSocket != -1);
+            }
+            else
+            {
+                std::cout << "Descriptor " << fds[i]. fd << " is readable" << std::endl;
+                close_conn = 0;
+
+                do {
+                    reServSock = recv(fds[i].fd, buffer, sizeof(buffer), 0);
+                    if (reServSock < 0)
+                    {
+                        if (errno != EWOULDBLOCK)
+                        {
+                            //perror("  recv() failed");
+                            close_conn = 1;
+                        }
+                        break;
+                    }
+                    if (reServSock == 0)
+                    {
+                        std::cout << "Connection closed" << std::endl;
+                        close_conn = 1;
+                        break;
+                    }
+                    len = reServSock;
+                    std::cout << len << " bytes recieved" << std::endl;
+                    
+                    reServSock = send(fds[i].fd, buffer, len, 0);
+                    if (reServSock < 0)
+                    {
+                        //perror("send() failed");
+                        close_conn = 1;
+                        break;
+                    }
+                } while (true);
+                if (close_conn)
+                {
+                    close (fds[i].fd);
+                    fds[i].fd = -1;
+                    compres_array = 1;
+                }
+            }
+        }
+        if (compres_array)
+        {
+            compres_array = 0;
+            for (int i = 0; i < nfds; i++)
+            {
+                if (fds[i].fd == -1)
+                {
+                    for (int j = i; j < nfds - 1; j++)
+                    {
+                        fds[j].fd = fds[j + 1].fd;
+                    }
+                    i--;
+                    nfds--;
+                }
+            }
+        }
+    } while (this->_signal == false);
+
+    for (int i = 0; i < nfds; i++)
+    {
+        if (fds[i].fd >= 0)
+            close (fds[i].fd);
+    }
+
+    // int clientSocket
+    //     = accept(serverSocket, NULL, NULL);
+
+    // char buffer[1024] = { 0 };
+    // recv(clientSocket, buffer, sizeof(buffer), 0);
+    // std::cout << "Message from client: " << buffer
+    //           << std::endl;
+
+    // close(serverSocket);
 
     // while (true)
     // {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:34 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 10:46:09 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 12:51:28 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	main(int ac, char **av) {
 		std::string password(av[2]);
 		Server	srv(port, password);
 		srv.run();
-		Client clt("Name", "Nick");
-		clt.run();
 	} catch (const std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;
 	}
