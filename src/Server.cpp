@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 14:07:23 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 15:10:37 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ Server::Server( const int& port, const std::string& password) :
     _clientNb(0),
     _servPassword(password) {
     
-    _cmds["NICK"] = &Server::_handleNick;
-    _cmds["PASS"] = &Server::_handlePass;
-    _cmds["USER"] = &Server::_handleUser;
-    _cmds["OPER"] = &Server::_handleOper;
-    _cmds["MODE"] = &Server::_handleMode;
-    _cmds["QUIT"] = &Server::_handleQuit;
-    _cmds["JOIN"] = &Server::_handleJoin;
-    _cmds["PART"] = &Server::_handlePart;
-    _cmds["TOPIC"] = &Server::_handleTopic;
-    _cmds["KICK"] = &Server::_handleKick;
-    _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
-    _cmds["NOTICE"] = &Server::_handleNotice;
+    // _cmds["NICK"] = &Server::_handleNick;
+    // _cmds["PASS"] = &Server::_handlePass;
+    // _cmds["USER"] = &Server::_handleUser;
+    // _cmds["OPER"] = &Server::_handleOper;
+    // _cmds["MODE"] = &Server::_handleMode;
+    // _cmds["QUIT"] = &Server::_handleQuit;
+    // _cmds["JOIN"] = &Server::_handleJoin;
+    // _cmds["PART"] = &Server::_handlePart;
+    // _cmds["TOPIC"] = &Server::_handleTopic;
+    // _cmds["KICK"] = &Server::_handleKick;
+    // _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
+    // _cmds["NOTICE"] = &Server::_handleNotice;
 }
 
 Server::Server( Server const & other )
@@ -138,13 +138,10 @@ void    Server::run( void )
 
     do {
         std::cout << "Waiting on poll()..." << std::endl;
-        reServSock = poll(fds, nfds, 180000);
+        reServSock = poll(fds, nfds, -1);
 
         if (reServSock == 0)
-        {
-            std::cout << "poll() time out. End program." << std::endl;
-            break;
-        }
+            throw(std::runtime_error("poll() faild"));
 
         current_size = nfds;
         for (int i = 0; i < current_size; i++)
@@ -167,8 +164,8 @@ void    Server::run( void )
                     {
                         if (errno != EWOULDBLOCK)
                         {
-                          //perror("  accept() failed");
-                          this->_signal = true;
+                            //perror("  accept() failed");
+                            this->_signal = true;
                         }
                         break;
                     }
@@ -181,6 +178,8 @@ void    Server::run( void )
             }
             else
             {
+                std::cout << "\033[31mRecieving Input\033[m" << std::endl;
+                
                 std::cout << "Descriptor " << fds[i]. fd << " is readable" << std::endl;
                 close_conn = 0;
 
@@ -243,19 +242,4 @@ void    Server::run( void )
         if (fds[i].fd >= 0)
             close (fds[i].fd);
     }
-
-    // int clientSocket
-    //     = accept(serverSocket, NULL, NULL);
-
-    // char buffer[1024] = { 0 };
-    // recv(clientSocket, buffer, sizeof(buffer), 0);
-    // std::cout << "Message from client: " << buffer
-    //           << std::endl;
-
-    // close(serverSocket);
-
-    // while (true)
-    // {
-        
-    // }
 }
