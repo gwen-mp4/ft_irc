@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:59:07 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 10:30:32 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 13:01:27 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@
 # include <csignal>
 # include <exception>
 
-# include "Channel.hpp"
-# include "Client.hpp"
-# include "Server.hpp"
+// # include "Channel.hpp"
+// # include "Client.hpp"
+// # include "Server.hpp"
+# include "Command.hpp"
 
 # ifndef PORT_MAX
 #  define PORT_MAX 65535

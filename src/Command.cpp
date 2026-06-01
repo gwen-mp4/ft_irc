@@ -1,0 +1,112 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Command.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/01 11:15:59 by gwen              #+#    #+#             */
+/*   Updated: 2026/06/01 14:04:25 by gwen             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../inc/Command.hpp"
+
+// To remove
+void	sanitizeLine(std::string line) {
+	if (!line.empty() && line.size() - 1 == '\n')
+		line.erase(line.size() - 1);
+	if (!line.empty() && line.size() - 1 == '\r')
+		line.erase(line.size() - 1);
+}
+
+Command::Command(std::string& line) : _prefix(""), _command("") {
+	try {
+		sanitizeLine(line);
+		Command::_parseCmd(line);
+	} catch (const std::exception& e) {
+		throw std::runtime_error("parse failed: " + std::string(e.what()));
+	}
+}
+
+Command::Command(const Command &other) {
+	*this = other;
+}
+
+Command &Command::operator=(const Command &other) {
+	if (this != &other) {
+		this->_prefix = other._prefix;
+		this->_command = other._command;
+		this->_params = other._params;
+	}
+	return *this;
+}
+
+Command::~Command() {}
+
+void Command::_parseCmd(std::string line) {
+	size_t	pos = 0;
+	
+	// For prefix (optional) that starts with ':'
+	if (!line.empty() && line.at(0) == ':') {
+		size_t	space = line.find(' ');
+		if (space != std::string::npos) {
+			_prefix = line.substr(pos + 1, space - 1);
+			pos = space + 1;
+		}
+	}
+	
+	while (pos < line.size() && line.at(pos) == ' ') pos++;
+
+	// Command (e.g. NICK, PASS, USER etc)
+	size_t	space = line.find(' ', pos);
+	if (space == std::string::npos) {
+		_command = line.substr(pos);
+		pos = line.size();
+	}
+	else {
+		_command = line.substr(pos, space - 1);
+		pos = space + 1;
+	}
+
+	// Parameters
+	while (pos < line.size()) {
+		while (pos < line.size() && line.at(pos) == ' ') pos++;
+		if (pos >= line.size()) break ;
+		if (line.at(pos) == ':') {
+			_params.push_back(line.substr(pos + 1));
+			break ;
+		}
+		size_t	next_space = line.find(' ', pos);
+		if (space == std::string::npos) {
+			_params.push_back(line.substr(pos));
+			break ;
+		}
+		else {
+			_params.push_back(line.substr(pos, next_space - pos));
+			pos = next_space + 1;
+		}
+	}
+
+	// DEBUG
+	std::cout << "CMD : [" << _command << "]\n";
+	std::cout << "NB ARGS: " << _params.size() << "\n";
+	for (size_t i = 0; i < _params.size(); ++i) {
+		std::cout << "Arg " << i << ": [" << _command.at(i) << "]\n";
+	}
+}
+
+int	main(int ac, char **av) {
+	if (ac != 1)
+		return 1;
+	(void) av;
+	std::string	line;
+	while (std::getline(std::cin, line)) {
+			if (line.empty()) {
+				std::cout << "> ";
+				continue ;
+		}
+		Command	Command(line);
+	}
+	return 0;
+}

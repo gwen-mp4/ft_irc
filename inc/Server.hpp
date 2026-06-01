@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 10:42:23 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 11:45:48 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,20 @@ class Server
         unsigned int            _clientNb;
         std::map<int, Client*>    _clients; // Using map for optimization with an int (FD) and pointer to Client
         std::string             _servPassword;
+        std::map<std::string, Command*> _cmds;
+
+        void    _handleNick();
+        void    _handlePass();
+        void    _handleUser();
+        void    _handleOper();
+        void    _handleMode();
+        void    _handleQuit();
+        void    _handleJoin();
+        void    _handlePart();
+        void    _handleTopic();
+        void    _handleKick();
+        void    _handlePrivMsg();
+        void    _handleNotice();
 
     public:
         Server( const int& port, const std::string& password);
