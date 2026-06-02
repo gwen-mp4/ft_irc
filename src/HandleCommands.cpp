@@ -1,7 +1,7 @@
 #include "../inc/Server.hpp"
 
 void    Server::treatCommand(Client* client, std::string raw_line) {
-    Command msg(raw_line);
+    Command msg(raw_line); // Parse the raw command into a Command object
     
     if (msg.getCommandUpcase() != "PASS" && msg.getCommandUpcase() != "NICK" && msg.getCommandUpcase() != "USER" && !client->isRegistered()) {
         std::cout << "Client not registered, cannot execute command: " << msg.getCommand() << std::endl;

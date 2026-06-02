@@ -10,3 +10,7 @@ LOG:
 -Added pointer function in server for command
 -Added IRC server code
 -Working on pre command handling
+
+*02/06 14:00 by gwen*:
+-Need to connect everything together (client information sending to command parsing and then command handling)
+-Need to add signals

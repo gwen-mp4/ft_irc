@@ -46,6 +46,8 @@ Server& Server::operator=( Server const & other )
         this->_signal = other._signal;
         this->_socket = other._socket;
         this->_clients = other._clients;
+        this->_servPassword = other._servPassword;
+        this->_cmds = other._cmds;
     }
     return (*this);
 }
