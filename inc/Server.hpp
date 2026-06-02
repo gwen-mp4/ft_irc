@@ -21,9 +21,11 @@ class Server
         int                     _port;
         int                     _socket;
         bool                    _signal;
+        struct pollfd           _fds[200];
         unsigned int            _clientNb;
-        std::map<int, Client*>    _clients; // Using map for optimization with an int (FD) and pointer to Client
+        std::map<int, Client*>  _clients; // Using map for optimization with an int (FD) and pointer to Client
         std::string             _servPassword;
+        char                    _buffer[1024];
         //std::map<std::string, Command*> _cmds;
 
         // void    _handleNick();
@@ -63,6 +65,10 @@ class Server
         // void    setServPassword( std::string );
 
         void    run( void );
+
+        void    clearBuff( void );
+        void    newClient( void );
+        void    clientInput( int fd );
         
 };
 
