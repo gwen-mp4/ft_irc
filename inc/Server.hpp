@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 16:09:11 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/02 09:59:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ class Server
         std::string             _servPassword;
         std::map<std::string, Command*> _cmds;
 
-        void    _handleNick();
-        void    _handlePass();
-        void    _handleUser();
-        void    _handleOper();
-        void    _handleMode();
-        void    _handleQuit();
-        void    _handleJoin();
-        void    _handlePart();
-        void    _handleTopic();
-        void    _handleKick();
-        void    _handlePrivMsg();
-        void    _handleNotice();
+        void    _handleNick(Client* client, const std::vector<std::string>& params);
+        void    _handlePass(Client* client, const std::vector<std::string>& params);
+        void    _handleUser(Client* client, const std::vector<std::string>& params);
+        void    _handleOper(Client* client, const std::vector<std::string>& params);
+        void    _handleMode(Client* client, const std::vector<std::string>& params);
+        void    _handleQuit(Client* client, const std::vector<std::string>& params);
+        void    _handleJoin(Client* client, const std::vector<std::string>& params);
+        void    _handlePart(Client* client, const std::vector<std::string>& params);
+        void    _handleTopic(Client* client, const std::vector<std::string>& params);
+        void    _handleKick(Client* client, const std::vector<std::string>& params);
+        void    _handlePrivMsg(Client* client, const std::vector<std::string>& params);
+        void    _handleNotice(Client* client, const std::vector<std::string>& params);
 
     public:
         Server( const int& port, const std::string& password);
