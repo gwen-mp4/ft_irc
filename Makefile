@@ -20,6 +20,8 @@ SRC_DIR = src/
 SRC = Channel.cpp \
 	Client.cpp \
 	Server.cpp \
+	Command.cpp \
+	HandleCommands.cpp \
 	main.cpp
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC))

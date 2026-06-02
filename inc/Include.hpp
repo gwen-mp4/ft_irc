@@ -14,6 +14,7 @@
 # define INCLUDE_HPP
 
 # include <sstream>
+# include <string>
 # include <iostream>
 # include <vector>
 # include <map>
