@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:59:07 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 14:06:08 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 16:05:07 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,12 @@
 # include "Server.hpp"
 # include "Command.hpp"
 
+# include "ServerCodeIRC.hpp"
+
 # ifndef PORT_MAX
 #  define PORT_MAX 65535
 # endif
+
+
 
 #endif

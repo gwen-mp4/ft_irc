@@ -6,23 +6,23 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 11:15:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 14:04:25 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 16:13:39 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Command.hpp"
 
-// To remove
-void	sanitizeLine(std::string line) {
-	if (!line.empty() && line.size() - 1 == '\n')
-		line.erase(line.size() - 1);
-	if (!line.empty() && line.size() - 1 == '\r')
-		line.erase(line.size() - 1);
-}
+// // To remove
+// void	sanitizeLine(std::string line) {
+// 	if (!line.empty() && line.size() - 1 == '\n')
+// 		line.erase(line.size() - 1);
+// 	if (!line.empty() && line.size() - 1 == '\r')
+// 		line.erase(line.size() - 1);
+// }
 
 Command::Command(std::string& line) : _prefix(""), _command("") {
 	try {
-		sanitizeLine(line);
+		//sanitizeLine(line);
 		Command::_parseCmd(line);
 	} catch (const std::exception& e) {
 		throw std::runtime_error("parse failed: " + std::string(e.what()));
@@ -46,6 +46,9 @@ Command::~Command() {}
 
 void Command::_parseCmd(std::string line) {
 	size_t	pos = 0;
+
+	if (line.empty() || line.find_first_not_of(" \r\n") == std::string::npos)
+		return ;
 	
 	// For prefix (optional) that starts with ':'
 	if (!line.empty() && line.at(0) == ':') {
@@ -65,7 +68,7 @@ void Command::_parseCmd(std::string line) {
 		pos = line.size();
 	}
 	else {
-		_command = line.substr(pos, space - 1);
+		_command = line.substr(pos, space - pos);
 		pos = space + 1;
 	}
 
@@ -78,7 +81,7 @@ void Command::_parseCmd(std::string line) {
 			break ;
 		}
 		size_t	next_space = line.find(' ', pos);
-		if (space == std::string::npos) {
+		if (next_space == std::string::npos) {
 			_params.push_back(line.substr(pos));
 			break ;
 		}
@@ -88,25 +91,51 @@ void Command::_parseCmd(std::string line) {
 		}
 	}
 
-	// DEBUG
-	std::cout << "CMD : [" << _command << "]\n";
-	std::cout << "NB ARGS: " << _params.size() << "\n";
-	for (size_t i = 0; i < _params.size(); ++i) {
-		std::cout << "Arg " << i << ": [" << _command.at(i) << "]\n";
-	}
+	// // DEBUG
+	// std::cout << "PREFIX : [" << _prefix << "]\n";
+	// std::cout << "CMD : [" << _command << "]\n";
+	// std::cout << "NB ARGS: " << _params.size() << "\n";
+	// for (size_t i = 0; i < _params.size(); ++i) {
+	// 	std::cout << "Arg " << i << ": [" << _params.at(i) << "]\n";
+	// }
 }
 
-int	main(int ac, char **av) {
-	if (ac != 1)
-		return 1;
-	(void) av;
-	std::string	line;
-	while (std::getline(std::cin, line)) {
-			if (line.empty()) {
-				std::cout << "> ";
-				continue ;
-		}
-		Command	Command(line);
-	}
-	return 0;
+std::string Command::getPrefix() const {
+	return _prefix;
 }
+
+// For error
+std::string	Command::getCommand() const {
+	return _command;
+}
+
+std::string Command::getCommandUpcase() const {
+	std::string	uppercaseCmd = "";
+	for (size_t i = 0; i < _command.length(); ++i) {
+		if (std::islower(_command.at(i)))
+			uppercaseCmd += std::toupper(_command.at(i));
+		else
+			uppercaseCmd += _command.at(i);
+	}
+	return uppercaseCmd;
+}
+
+std::vector<std::string> Command::getParams() const {
+	return _params;
+}
+
+// int	main(int ac, char **av) {
+// 	if (ac != 1)
+// 		return 1;
+// 	(void) av;
+// 	std::string	line;
+// 	while (std::getline(std::cin, line)) {
+// 			if (line.empty()) {
+// 				std::cout << "> ";
+// 				continue ;
+// 		}
+// 		Command	Command(line);
+// 		std::cout << Command.getCommand() << "\n";
+// 	}
+// 	return 0;
+// }

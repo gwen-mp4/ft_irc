@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 15:10:37 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/01 16:14:19 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,28 @@ Server::~Server( void )
     // {
     //     delete this->_clients[i];
     // }
+}
+
+void    Server::treatCommand(Client* client, const Command& msg) {
+    if (msg.getCommandUpcase() != "PASS" && msg.getCommandUpcase() != "NICK" && msg.getCommandUpcase() != "USER" && !client->isRegistered()) {
+        this->sendClientMessage(client->getClientFd(), ":server " ERR_NOTREGISTERED " * :You have not registered\r\n");
+        return ;
+    }
+
+    // Temporary if/else, later change to pointer to pointer function
+    if (msg.getCommand() == "PASS") this->_handlePass();
+    else if (msg.getCommandUpcase() == "NICK") this->_handleNick();
+    else if (msg.getCommandUpcase() == "USER") this->_handleUser();
+    else if (msg.getCommandUpcase() == "PRIVMSG") this->_handlePrivMsg();
+    else if (msg.getCommandUpcase() == "JOIN") this->_handleJoin();
+    else {
+        this->sendClientMessage(client->getClientFd(), ":server " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n");
+    }
+}
+
+// Send a message to client with the code (defined in ServerCodeIRC.hpp)
+void    Server::sendClientMessage(int clientFD, std::string message) {
+    
 }
 
 

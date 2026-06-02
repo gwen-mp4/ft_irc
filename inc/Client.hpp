@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 14:05:49 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/01 15:42:26 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ class Client
         std::string _clientIpAddr;
         int         _clientFd;
         
-        bool    hasEnteredPass;
-        bool    hasGivenNick;
-        bool    hasGivenUser;
-        bool    isRegistered; // Is true when all 3 above are true
+        bool    _hasEnteredPass;
+        bool    _hasGivenNick;
+        bool    _hasGivenUser;
+        bool    _isRegistered; // Is true when all 3 above are true
 
     public:
         Client( const std::string& name, const std::string& nick );
@@ -39,7 +39,8 @@ class Client
         // std::string getUsername( void ) const;
         // std::string getNickname( void ) const;
         // std::string getclientIP( void ) const;
-        // int         getClientFd( void ) const;
+        int getClientFd( void ) const;
+        bool    isRegistered() const;
 
         //Setter
         void    setUsername( std::string username );
