@@ -22,15 +22,15 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["NICK"] = &Server::_handleNick;
     _cmds["PASS"] = &Server::_handlePass;
     _cmds["USER"] = &Server::_handleUser;
-    _cmds["OPER"] = &Server::_handleOper;
-    _cmds["MODE"] = &Server::_handleMode;
-    _cmds["QUIT"] = &Server::_handleQuit;
+    //_cmds["OPER"] = &Server::_handleOper;
+    //_cmds["MODE"] = &Server::_handleMode;
+    //_cmds["QUIT"] = &Server::_handleQuit;
     _cmds["JOIN"] = &Server::_handleJoin;
-    _cmds["PART"] = &Server::_handlePart;
-    _cmds["TOPIC"] = &Server::_handleTopic;
-    _cmds["KICK"] = &Server::_handleKick;
+    //_cmds["PART"] = &Server::_handlePart;
+    //_cmds["TOPIC"] = &Server::_handleTopic;
+    //_cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
-    _cmds["NOTICE"] = &Server::_handleNotice;
+    //_cmds["NOTICE"] = &Server::_handleNotice;
 }
 
 Server::Server( Server const & other )
@@ -59,10 +59,10 @@ Server::~Server( void )
     // }
 }
 
-// Send a message to client with the code (defined in ServerCodeIRC.hpp)
-void    Server::sendClientMessage(int clientFD, std::string message) {
+// // Send a message to client with the code (defined in ServerCodeIRC.hpp)
+// void    Server::sendClientMessage(int clientFD, std::string message) {
     
-}
+// }
 
 
 // /* ---------- Getter ---------- */
