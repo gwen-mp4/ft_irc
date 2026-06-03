@@ -14,3 +14,11 @@ LOG:
 *02/06 14:00 by gwen*:
 -Need to connect everything together (client information sending to command parsing and then command handling)
 -Need to add signals
+
+
+*03/06 14:00 by storck*:
+-IRC server can succesfully be started, accept client and handel client input.
+-Launch the program, then in another terminal, type :> nc localhost [port #]. Then have fun sending messages to server.
+
+TODO:   Cleanly destroy a client when it disconnects.
+        Manage client input as commands, right now it is only a string displayed by the server.
