@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/03 10:48:37 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/03 10:53:54 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@ Server::Server( const int& port, const std::string& password) :
     _clientNb(1),
     _servPassword(password) {
     
-    // _cmds["NICK"] = &Server::_handleNick;
-    // _cmds["PASS"] = &Server::_handlePass;
-    // _cmds["USER"] = &Server::_handleUser;
-    // _cmds["OPER"] = &Server::_handleOper;
-    // _cmds["MODE"] = &Server::_handleMode;
-    // _cmds["QUIT"] = &Server::_handleQuit;
-    // _cmds["JOIN"] = &Server::_handleJoin;
-    // _cmds["PART"] = &Server::_handlePart;
-    // _cmds["TOPIC"] = &Server::_handleTopic;
-    // _cmds["KICK"] = &Server::_handleKick;
-    // _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
-    // _cmds["NOTICE"] = &Server::_handleNotice;
+    _cmds["NICK"] = &Server::_handleNick;
+    _cmds["PASS"] = &Server::_handlePass;
+    _cmds["USER"] = &Server::_handleUser;
+    _cmds["OPER"] = &Server::_handleOper;
+    _cmds["MODE"] = &Server::_handleMode;
+    _cmds["QUIT"] = &Server::_handleQuit;
+    _cmds["JOIN"] = &Server::_handleJoin;
+    _cmds["PART"] = &Server::_handlePart;
+    _cmds["TOPIC"] = &Server::_handleTopic;
+    _cmds["KICK"] = &Server::_handleKick;
+    _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
+    _cmds["NOTICE"] = &Server::_handleNotice;
 }
 
 Server::Server( Server const & other )
@@ -59,27 +59,27 @@ Server::~Server( void )
     // }
 }
 
-// void    Server::treatCommand(Client* client, const Command& msg) {
-//     if (msg.getCommandUpcase() != "PASS" && msg.getCommandUpcase() != "NICK" && msg.getCommandUpcase() != "USER" && !client->isRegistered()) {
-//         this->sendClientMessage(client->getClientFd(), ":server " ERR_NOTREGISTERED " * :You have not registered\r\n");
-//         return ;
-//     }
+void    Server::treatCommand(Client* client, const Command& msg) {
+    if (msg.getCommandUpcase() != "PASS" && msg.getCommandUpcase() != "NICK" && msg.getCommandUpcase() != "USER" && !client->isRegistered()) {
+        this->sendClientMessage(client->getClientFd(), ":server " ERR_NOTREGISTERED " * :You have not registered\r\n");
+        return ;
+    }
 
-//     // Temporary if/else, later change to pointer to pointer function
-//     if (msg.getCommand() == "PASS") this->_handlePass();
-//     else if (msg.getCommandUpcase() == "NICK") this->_handleNick();
-//     else if (msg.getCommandUpcase() == "USER") this->_handleUser();
-//     else if (msg.getCommandUpcase() == "PRIVMSG") this->_handlePrivMsg();
-//     else if (msg.getCommandUpcase() == "JOIN") this->_handleJoin();
-//     else {
-//         this->sendClientMessage(client->getClientFd(), ":server " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n");
-//     }
-// }
+    // Temporary if/else, later change to pointer to pointer function
+    if (msg.getCommand() == "PASS") this->_handlePass();
+    else if (msg.getCommandUpcase() == "NICK") this->_handleNick();
+    else if (msg.getCommandUpcase() == "USER") this->_handleUser();
+    else if (msg.getCommandUpcase() == "PRIVMSG") this->_handlePrivMsg();
+    else if (msg.getCommandUpcase() == "JOIN") this->_handleJoin();
+    else {
+        this->sendClientMessage(client->getClientFd(), ":server " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n");
+    }
+}
 
 // Send a message to client with the code (defined in ServerCodeIRC.hpp)
-// void    Server::sendClientMessage(int clientFD, std::string message) {
+void    Server::sendClientMessage(int clientFD, std::string message) {
     
-// }
+}
 
 
 // /* ---------- Getter ---------- */
@@ -158,7 +158,6 @@ void Server::newClient( void )
 
     cl.setClientFd(inFd);
     cl.setclientIP(inet_ntoa(clientAddr.sin_addr));
-    //this->_clients.insert(this->_clients.end(), cl);
     this->_clients[this->_clients.size()] = &cl;
     this->_fds[this->_clientNb] = newPoll;
     this->_clientNb++;
