@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 16:09:11 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/03 10:11:43 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ class Server
         Server& operator=( Server const & other );
         ~Server( void );
 
-        void    treatCommand(Client* client, const Command& msg);
+        //void    treatCommand(Client* client, const Command& msg);
 
-        void    sendClientMessage(int clientFD, std::string message);
+        //void    sendClientMessage(int clientFD, std::string message);
         // For now, we don't need it or won't need it for later
         // //Getter:
         // int         getport( void ) const;
