@@ -86,10 +86,10 @@ bool    Client::isRegistered() const {
 //     this->_username = username;
 // }
 
-// void    Client::setNickname( std::string nickname )
-// {
-//     this->_nickname = nickname;
-// }
+void    Client::setNickname( const std::string& nickname )
+{
+    this->_nickname = nickname;
+}
 
 void    Client::setClientIP( const std::string& clientIP )
 {
