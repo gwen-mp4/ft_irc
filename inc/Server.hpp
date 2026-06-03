@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/03 10:58:50 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/03 12:27:26 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class Server
 
         int                     _port;
         int                     _socket;
-        bool                    _signal;
+        static bool             _signal;
         struct pollfd           _fds[200];
         unsigned int            _clientNb;
         std::map<int, Client*>  _clients; // Using map for optimization with an int (FD) and pointer to Client
@@ -52,7 +52,7 @@ class Server
 
         void    treatCommand(Client* client, std::string raw_line);
 
-        //void    sendClientMessage(int clientFD, std::string message);
+        void    sendClientMessage(int clientFD, std::string message);
 
         // For now, we don't need it or won't need it for later
         // //Getter:
@@ -70,6 +70,7 @@ class Server
 
         void    run( void );
 
+        static void    signalHandler( int sig );
         void    clearBuff( void );
         void    newClient( void );
         void    clientInput( int fd );

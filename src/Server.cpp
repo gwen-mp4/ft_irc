@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/03 10:57:52 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/03 12:29:25 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Server::Server( const int& port, const std::string& password) :
     _port(port), 
     _socket(-1),
-    _signal(false),
+    //_signal(false),
     _clientNb(1),
     _servPassword(password) {
     
@@ -62,9 +62,10 @@ Server::~Server( void )
 }
 
 // // Send a message to client with the code (defined in ServerCodeIRC.hpp)
-// void    Server::sendClientMessage(int clientFD, std::string message) {
-    
-// }
+void    Server::sendClientMessage(int clientFD, std::string message)
+{
+    treatCommand(this->_clients[clientFD], message);
+}
 
 
 // /* ---------- Getter ---------- */
@@ -116,7 +117,12 @@ Server::~Server( void )
 // {
 //     this->_servPassword = pswd;
 // }
-
+bool Server::_signal = false;
+void Server::signalHandler( int sig )
+{
+	std::cout << std::endl << "Signal " << sig << " Received!" << std::endl;
+	Server::_signal = true;
+}
 
 void Server::newClient( void )
 {
@@ -143,7 +149,8 @@ void Server::newClient( void )
 
     cl.setClientFd(inFd);
     cl.setclientIP(inet_ntoa(clientAddr.sin_addr));
-    this->_clients[this->_clients.size()] = &cl;
+    //this->_clients[this->_clients.size()] = &cl;
+    this->_clients.insert(std::pair<int, Client*>(inFd, &cl));
     this->_fds[this->_clientNb] = newPoll;
     this->_clientNb++;
 
@@ -175,7 +182,7 @@ void    Server::clientInput( int fd )
     {
         this->_buffer[bytes] = '\0';
         std::cout << "\033[32mClient <" << fd << "> input: " << this->_buffer << "\033[m";
-        // Manage input here...
+        sendClientMessage(fd, this->_buffer);
     }
 }
 
@@ -225,5 +232,10 @@ void    Server::run( void )
             close (this->_fds[i].fd);
             this->_clientNb--;
         }
+    }
+    if (reServSock != -1)
+    {
+        std::cout << "ClOSING SERVER." << std::endl;
+        close(reServSock);
     }
 }
