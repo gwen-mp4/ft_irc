@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:34 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/03 12:12:56 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/03 12:33:01 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	main(int ac, char **av) {
 		int	port = parsePort(av[1]);
 		std::string password(av[2]);
 		Server	srv(port, password);
-		signal(SIGINT, Server::signalHandler);
-		signal(SIGQUIT, Server::signalHandler);
+		// signal(SIGINT, Server::signalHandler);
+		// signal(SIGQUIT, Server::signalHandler);
 		srv.run();
 	} catch (const std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;

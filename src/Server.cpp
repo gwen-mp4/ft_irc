@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/03 12:29:25 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/03 12:34:02 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,8 @@ void    Server::run( void )
     this->_fds[0].events = POLLIN;
 
     do {
+        signal(SIGINT, Server::signalHandler);
+		signal(SIGQUIT, Server::signalHandler);
         std::cout << "Waiting on poll()..." << std::endl;
         reServSock = poll(this->_fds, this->_clientNb, -1);
 
@@ -223,6 +225,8 @@ void    Server::run( void )
             }
         }
     } while (this->_signal == false);
+
+    std::cout << "ClOSING SERVER." << std::endl;
 
     int nfds = this->_clientNb;
     for (int i = 0; i < nfds; i++)
