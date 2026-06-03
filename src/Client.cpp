@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 15:42:29 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/03 10:26:59 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Include.hpp"
+
+Client::Client( void ) : _username(""), _nickname("") {}
 
 Client::Client( const std::string& name, const std::string& nick ) : _username(name), _nickname(nick) {}
 
@@ -73,10 +75,10 @@ bool    Client::isRegistered() const {
 //     this->_nickname = nickname;
 // }
 
-// void    Client::setclientIP( std::string clientIP )
-// {
-//     this->_clientIpAddr = clientIP;
-// }
+void    Client::setclientIP( std::string clientIP )
+{
+    this->_clientIpAddr = clientIP;
+}
 
 void    Client::setClientFd( int fd )
 {

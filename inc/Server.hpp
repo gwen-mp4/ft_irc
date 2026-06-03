@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/02 09:59:03 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/03 10:58:50 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ class Server
         int                     _port;
         int                     _socket;
         bool                    _signal;
+        struct pollfd           _fds[200];
         unsigned int            _clientNb;
-        std::map<int, Client*>    _clients; // Using map for optimization with an int (FD) and pointer to Client
+        std::map<int, Client*>  _clients; // Using map for optimization with an int (FD) and pointer to Client
         std::string             _servPassword;
+        char                    _buffer[1024];
         std::map<std::string, CmdHandler> _cmds;
 
         void    _handleNick(Client* client, const std::vector<std::string>& params);
@@ -67,6 +69,10 @@ class Server
         // void    setServPassword( std::string );
 
         void    run( void );
+
+        void    clearBuff( void );
+        void    newClient( void );
+        void    clientInput( int fd );
         
 };
 
