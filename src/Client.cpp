@@ -38,24 +38,40 @@ Client::~Client( void ) {}
 
 /* ---------- Getter ---------- */
 
-// std::string Client::getUsername( void ) const
-// {
-//     return this->_username;
-// }
+std::string Client::getUsername( void ) const
+{
+    return this->_username;
+}
 
-// std::string Client::getNickname( void ) const
-// {
-//     return this->_nickname;
-// }
+std::string Client::getNickname( void ) const
+{
+    return this->_nickname;
+}
 
-// std::string Client::getclientIP( void ) const
-// {
-//     return this->_clientIpAddr;
-// }
+std::string Client::getclientIP( void ) const
+{
+    return this->_clientIpAddr;
+}
 
 int         Client::getClientFd( void ) const
 {
     return this->_clientFd;
+}
+
+std::set<Channel*>  Client::getJoinedChannels() const {
+    return this->_joinedChannels;
+}
+
+bool Client::hasSentNick() const {
+    return _hasGivenNick;
+}
+
+bool Client::hasSentPass() const {
+    return _hasEnteredPass;
+}
+
+bool Client::hasSentUser() const {
+    return _hasGivenUser;
 }
 
 bool    Client::isRegistered() const {
@@ -80,7 +96,19 @@ void    Client::setclientIP( std::string clientIP )
     this->_clientIpAddr = clientIP;
 }
 
-void    Client::setClientFd( int fd )
+void    Client::setClientFd( const int& fd )
 {
     this->_clientFd = fd;
+}
+
+void Client::setSentPass(bool status) {
+    this->_hasEnteredPass = status;
+}
+
+void Client::setSentNick(bool status) {
+    this->_hasGivenNick = status;
+}
+
+void Client::setSentUser(bool status) {
+    this->_hasGivenUser = status;
 }

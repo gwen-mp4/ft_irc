@@ -28,6 +28,7 @@ class Channel
         std::string             _topic;
         unsigned int            _nbOp;
         std::map<int, Client*>    _operators; // Using map for optimization with an int (FD) and pointer to Client
+        std::map<int, Client*>  _members; // Members of a channel using their FD
 
     public:
         Channel( void ); // To change with something else with constructor with parameters instead of default constructor
@@ -43,6 +44,7 @@ class Channel
         // int         getLimit( void ) const;
         // std::string getPassword( void ) const;
         // std::string getTopic( void ) const;
+        std::map<int, Client*>  getMembers() const;
 
         // //Setter
         // void    setInviteMode( bool mod );
@@ -52,6 +54,7 @@ class Channel
         // void    setPassword( std::string newPassW );
         // void    setTpoic( std::string newTopic );
 
+        void    Channel::broadcastToChannel(Client* sender, std::string message);
 };
 
 #endif

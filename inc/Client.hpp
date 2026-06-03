@@ -22,7 +22,11 @@ class Client
         std::string _nickname;
         std::string _clientIpAddr;
         int         _clientFd;
+
+        std::set<Channel*>  _joinedChannels;
         
+        bool    _isOperator;
+
         bool    _hasEnteredPass;
         bool    _hasGivenNick;
         bool    _hasGivenUser;
@@ -35,20 +39,25 @@ class Client
         Client& operator=( Client const & other );
         ~Client( void );
 
-        // For now, we don't need it or won't need it for later
-        // //Getter:
-        // std::string getUsername( void ) const;
-        // std::string getNickname( void ) const;
-        // std::string getclientIP( void ) const;
+        //Getter:
+        std::string getUsername( void ) const;
+        std::string getNickname( void ) const;
+        std::string getclientIP( void ) const;
         int getClientFd( void ) const;
+        std::set<Channel*>  getJoinedChannels() const;
+        bool    hasSentNick() const;
+        bool    hasSentPass() const;
+        bool    hasSentUser() const;
         bool    isRegistered() const;
 
         //Setter
-        void    setUsername( std::string username );
-        void    setNickname( std::string nickname );
-        void    setclientIP( std::string clientIP );
-        void    setClientFd( int fd );
-
+        void    setUsername( const std::string& username );
+        void    setNickname( const std::string& nickname );
+        void    setclientIP( const std::string& clientIP );
+        void    setClientFd( const int& fd );
+        void    setSentPass(bool status);
+        void    setSentNick(bool status);
+        void    setSentUser(bool status);
 };
 
 class Operator: public Client
