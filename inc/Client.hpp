@@ -53,7 +53,7 @@ class Client
         //Setter
         void    setUsername( const std::string& username );
         void    setNickname( const std::string& nickname );
-        void    setclientIP( const std::string& clientIP );
+        void    setClientIP( const std::string& clientIP );
         void    setClientFd( const int& fd );
         void    setSentPass(bool status);
         void    setSentNick(bool status);

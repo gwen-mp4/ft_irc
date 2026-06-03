@@ -91,7 +91,7 @@ bool    Client::isRegistered() const {
 //     this->_nickname = nickname;
 // }
 
-void    Client::setclientIP( std::string clientIP )
+void    Client::setClientIP( const std::string& clientIP )
 {
     this->_clientIpAddr = clientIP;
 }

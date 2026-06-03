@@ -9,7 +9,7 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
         return ;
     }
 
-    // Temporary if/else, later change to pointer function
+    // Temporary if/else, later change to pointer function and add the rest of command
     if (msg.getCommandUpcase() == "PASS") this->_handlePass(client, msg.getParams());
     else if (msg.getCommandUpcase() == "NICK") this->_handleNick(client, msg.getParams());
     else if (msg.getCommandUpcase() == "USER") this->_handleUser(client, msg.getParams());
@@ -27,7 +27,7 @@ bool    Server::validNickname(const std::string& nickname) {
     // This norms follows the norms given by GeekShed IRC Network
     if (nickname.empty() || nickname.length() > 30)
         return false;
-    std::string specialChar = "[]{}\|^`–_";
+    std::string specialChar = "[]{}\\|^`–_";
     if (!std::isalpha(nickname[0]) && specialChar.find(nickname[0]) == std::string::npos)
         return false;
     for (size_t i = 1; i < nickname.length(); ++i) {
@@ -63,10 +63,10 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     
     // If client if already registered and want to change nickname, inform all clients of the modification
     if (client->isRegistered()) {
-        std::string msg = ":" + client->getNickname() + "NICK :" + nickname;
+        std::string msg = ":" + client->getNickname() + "NICK :" + nickname + "\r\n";
         for (std::set<Channel*>::iterator it = client->getJoinedChannels().begin();
             it != client->getJoinedChannels().end(); ++it) {
-                (*it)->broadcastToChannel(client, msg);
+                //(*it)->broadcastToChannel(client, msg);
         }
     }
 

@@ -22,3 +22,9 @@ LOG:
 
 TODO:   Cleanly destroy a client when it disconnects.
         Manage client input as commands, right now it is only a string displayed by the server.
+
+*03/06 14:10 by gwen*:
+-Coded password and nickname handlers, have to test
+
+## (for storck)
+-If you can, create the function to send message to client asap so I will be able to test and correct it early

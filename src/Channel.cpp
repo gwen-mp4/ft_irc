@@ -122,10 +122,10 @@ std::map<int, Client*>  Channel::getMembers() const {
 //     this->_topic = newTopic;
 // }
 
-void    Channel::broadcastToChannel(Client* sender, std::string message) {
-    std::map<int, Client*>::iterator it = _members.begin();
-    for (; it != _members.end(); ++it) {
-        if (sender == NULL || it->second->getClientFd() != sender->getClientFd())
-            //Server::sendClientMessage(it->first, message);
-    }
-}
+// void    Channel::broadcastToChannel(Client* sender, std::string message) {
+//     std::map<int, Client*>::iterator it = _members.begin();
+//     for (; it != _members.end(); ++it) {
+//         if (sender == NULL || it->second->getClientFd() != sender->getClientFd())
+//             //Server::sendClientMessage(it->first, message);
+//     }
+// }

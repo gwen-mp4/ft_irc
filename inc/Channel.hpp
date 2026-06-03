@@ -54,7 +54,7 @@ class Channel
         // void    setPassword( std::string newPassW );
         // void    setTpoic( std::string newTopic );
 
-        void    Channel::broadcastToChannel(Client* sender, std::string message);
+        //void    Channel::broadcastToChannel(Client* sender, std::string message);
 };
 
 #endif
