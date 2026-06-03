@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/03 17:34:33 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/03 17:37:46 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ Server::~Server( void )
 }
 
 // // Send a message to client with the code (defined in ServerCodeIRC.hpp)
-// void    Server::sendClientMessage(int clientFD, std::string message) {
-    
-// }
+void    Server::sendClientMessage(int clientFD, std::string message)
+{
+    treatCommand(this->_clients[clientFD], message);
+}
 
 
 // /* ---------- Getter ---------- */
