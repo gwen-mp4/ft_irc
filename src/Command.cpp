@@ -109,15 +109,10 @@ std::string	Command::getCommand() const {
 	return _command;
 }
 
-std::string Command::getCommandUpcase() const {
-	std::string	uppercaseCmd = "";
-	for (size_t i = 0; i < _command.length(); ++i) {
-		if (std::islower(_command.at(i)))
-			uppercaseCmd += std::toupper(_command.at(i));
-		else
-			uppercaseCmd += _command.at(i);
-	}
-	return uppercaseCmd;
+std::string Command::	getCommandUpcase() const {
+    std::string uppercaseCommand = _command;
+    std::transform(uppercaseCommand.begin(), uppercaseCommand.end(), uppercaseCommand.begin(), ::toupper);
+	return uppercaseCommand;
 }
 
 std::vector<std::string> Command::getParams() const {

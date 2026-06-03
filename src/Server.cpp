@@ -46,6 +46,7 @@ Server& Server::operator=( Server const & other )
         this->_signal = other._signal;
         this->_socket = other._socket;
         this->_clients = other._clients;
+        this->_clientsNick = other._clientsNick;
         this->_servPassword = other._servPassword;
         this->_cmds = other._cmds;
     }
@@ -59,6 +60,13 @@ Server::~Server( void )
     // {
     //     delete this->_clients[i];
     // }
+}
+
+void    Server::broadcastToChannel(Channel* channel, std::string message) {
+    std::map<int, Client*> members = channel->getMembers();
+    for (std::map<int, Client*>::iterator it = members.begin(); it != members.end(); ++it) {
+        //this->sendClientMessage(it->first, message);
+    }
 }
 
 // // Send a message to client with the code (defined in ServerCodeIRC.hpp)

@@ -26,8 +26,10 @@ class Server
         bool                    _signal;
         unsigned int            _clientNb;
         std::map<int, Client*>    _clients; // Using map for optimization with an int (FD) and pointer to Client
+        std::map<std::string, Client*>  _clientsNick; // Searching clients by nickname
         std::string             _servPassword;
         std::map<std::string, CmdHandler> _cmds;
+        std::map<std::string, Channel*> _channels;
 
         void    _handleNick(Client* client, const std::vector<std::string>& params);
         void    _handlePass(Client* client, const std::vector<std::string>& params);
@@ -48,6 +50,7 @@ class Server
         Server& operator=( Server const & other );
         ~Server( void );
 
+        bool    validNickname(const std::string& nickname);
         void    treatCommand(Client* client, std::string raw_line);
 
         //void    sendClientMessage(int clientFD, std::string message);

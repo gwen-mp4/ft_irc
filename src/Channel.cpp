@@ -38,6 +38,7 @@ Channel& Channel::operator=( Channel const & other )
         this->_topic = other._topic;
         this->_nbOp = other._nbOp;
         this->_operators = other._operators;
+        this->_members = other._members;
     }
     return (*this);
 }
@@ -84,6 +85,10 @@ Channel::~Channel( void )
 //     return this->_topic;
 // }
 
+std::map<int, Client*>  Channel::getMembers() const {
+    return _members;
+}
+
 
 // /* ---------- Setter ---------- */
 
@@ -116,3 +121,11 @@ Channel::~Channel( void )
 // {
 //     this->_topic = newTopic;
 // }
+
+void    Channel::broadcastToChannel(Client* sender, std::string message) {
+    std::map<int, Client*>::iterator it = _members.begin();
+    for (; it != _members.end(); ++it) {
+        if (sender == NULL || it->second->getClientFd() != sender->getClientFd())
+            //Server::sendClientMessage(it->first, message);
+    }
+}

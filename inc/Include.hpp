@@ -18,6 +18,7 @@
 # include <iostream>
 # include <vector>
 # include <map>
+# include <set>
 # include <sys/socket.h>
 # include <sys/types.h>
 # include <netinet/in.h>
@@ -27,6 +28,7 @@
 # include <poll.h>
 # include <csignal>
 # include <exception>
+# include <algorithm>
 
 # include "Channel.hpp"
 # include "Client.hpp"
