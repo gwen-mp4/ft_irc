@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/03 10:26:59 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 11:51:38 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ Client& Client::operator=( Client const & other )
     return (*this);
 }
 
-Client::~Client( void ) {}
+Client::~Client( void )
+{
+    std::cout << "Client " << this->_clientFd << " destroyed" << std::endl;
+}
 
 
 /* ---------- Getter ---------- */

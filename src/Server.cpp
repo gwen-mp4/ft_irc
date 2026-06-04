@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/04 11:13:46 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 12:05:28 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void Server::signalHandler( int sig )
 
 void Server::newClient( void )
 {
-    Client              cl;
+    Client              *cl = new Client();
     struct sockaddr_in  clientAddr;
     struct pollfd       newPoll;
     socklen_t           len = sizeof(clientAddr);
@@ -148,10 +148,10 @@ void Server::newClient( void )
     newPoll.events = POLLIN;
     newPoll.revents = 0;
 
-    cl.setClientFd(inFd);
-    cl.setClientIP(inet_ntoa(clientAddr.sin_addr));
+    cl->setClientFd(inFd);
+    cl->setClientIP(inet_ntoa(clientAddr.sin_addr));
     //this->_clients[this->_clients.size()] = &cl;
-    this->_clients.insert(std::pair<int, Client*>(inFd, &cl));
+    this->_clients.insert(std::pair<int, Client*>(inFd, cl));
     this->_fds[this->_clientNb] = newPoll;
     this->_clientNb++;
 
@@ -166,6 +166,12 @@ void    Server::clearBuff( void )
     }
 }
 
+void    Server::clearClient( int fd )
+{
+    delete this->_clients[fd];
+    this->_clients.erase(fd);
+}
+
 void    Server::clientInput( int fd )
 {
     clearBuff();
@@ -175,7 +181,7 @@ void    Server::clientInput( int fd )
     if (bytes <= 0)
     {
         std::cerr << "\033[36mClient <" << fd << "> disconnected\033[m" << std::endl;
-        // Clear client...
+        clearClient(fd);
         this->_clientNb--;
         close(fd);
     }
