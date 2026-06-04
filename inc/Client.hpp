@@ -33,7 +33,6 @@ class Client
         bool    _hasEnteredPass;
         bool    _hasGivenNick;
         bool    _hasGivenUser;
-        bool    _isRegistered; // Is true when all 3 above are true
 
     public:
         Client( void );

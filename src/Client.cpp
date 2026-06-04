@@ -78,9 +78,8 @@ bool Client::hasSentUser() const {
 }
 
 bool    Client::isRegistered() const {
-    return _isRegistered;
+    return _hasGivenNick && _hasEnteredPass && _hasGivenUser;
 }
-
 
 /* ---------- Setter ---------- */
 

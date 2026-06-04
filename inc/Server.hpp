@@ -56,6 +56,8 @@ class Server
         Server& operator=( Server const & other );
         ~Server( void );
 
+        std::string ft_itoa(int num) const;
+
         bool    validNickname(const std::string& nickname) const;
         bool    validUsername(const std::string& username) const;
         void    treatCommand(Client* client, std::string raw_line);
