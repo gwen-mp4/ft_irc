@@ -79,16 +79,28 @@ bool    Client::isRegistered() const {
 }
 
 
-// /* ---------- Setter ---------- */
+/* ---------- Setter ---------- */
 
-// void    Client::setUsername( std::string username )
-// {
-//     this->_username = username;
-// }
+void    Client::setUsername( const std::string& username )
+{
+    this->_username = username;
+}
 
 void    Client::setNickname( const std::string& nickname )
 {
     this->_nickname = nickname;
+}
+
+void    Client::setRealName(const std::string &realname) {
+    this->_realname = realname;
+}
+
+void    Client::setHostname(const std::string &hostname) {
+    this->_hostname = hostname;
+}
+
+void    Client::setServerName(const std::string &servername) {
+    this->_serverName = servername;
 }
 
 void    Client::setClientIP( const std::string& clientIP )

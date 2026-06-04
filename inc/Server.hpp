@@ -52,7 +52,8 @@ class Server
         Server& operator=( Server const & other );
         ~Server( void );
 
-        bool    validNickname(const std::string& nickname);
+        bool    validNickname(const std::string& nickname) const;
+        bool    validUsername(const std::string& username) const;
         void    treatCommand(Client* client, std::string raw_line);
 
         void    sendClientMessage(int clientFD, std::string message);
