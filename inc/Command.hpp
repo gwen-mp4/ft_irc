@@ -27,6 +27,7 @@ class Command {
 		Command& operator=(const Command& other);
 		~Command();
 
+		void	sanitizeLine(std::string line);
 		void	parseCmd(std::string line);
 
 		std::string	getPrefix() const;

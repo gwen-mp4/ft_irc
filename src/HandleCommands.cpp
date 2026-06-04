@@ -1,25 +1,12 @@
 #include "../inc/Server.hpp"
 
-// // To remove
-// void	sanitizeLine(std::string line) {
-// 	if (!line.empty() && line.size() - 1 == '\n')
-// 		line.erase(line.size() - 1);
-// 	if (!line.empty() && line.size() - 1 == '\r')
-// 		line.erase(line.size() - 1);
-// }
-
 void    Server::treatCommand(Client* client, std::string raw_line) {
     Command msg; // Parse the raw command into a Command object
-    try {
-		//sanitizeLine(raw_line);
-		msg.parseCmd(raw_line);
-	} catch (const std::exception& e) {
-		throw std::runtime_error("parse failed: " + std::string(e.what()));
-	}
+	msg.parseCmd(raw_line);
     
     if (msg.getCommandUpcase() != "PASS" && msg.getCommandUpcase() != "NICK" && msg.getCommandUpcase() != "USER" && !client->isRegistered()) {
         std::cout << "Client not registered, cannot execute command: " << msg.getCommand() << std::endl;
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NOTREGISTERED " * :You have not registered\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NOTREGISTERED " * :You have not registered\r\n");
         return ;
     }
 
@@ -31,7 +18,7 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
     else if (msg.getCommandUpcase() == "JOIN") this->_handleJoin(client, msg.getParams());
     else {
         std::cout << "Unknown command: " << msg.getCommand() << std::endl;
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n");
         return ;
     }
 }
@@ -57,21 +44,21 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     // If number of parameters is <1, that means no nickname were given
     // So send error 431
     if (params.size() < 1) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NONICKNAMEGIVEN " * :No nickname given\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NONICKNAMEGIVEN " * :No nickname given\r\n");
         return ;
     }
 
     // Take the new nickname and verify if it respects the IRC norms, otherwise, send error 432
     std::string nickname = params.at(0);
     if (!validNickname(nickname)) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ERRONEUSNICKNAME " " + client->getClientFd()
-        //    + ' ' + nickname + " :Erroneus nickname\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ERRONEUSNICKNAME " " + client->getClientFd()
+           + ' ' + nickname + " :Erroneus nickname\r\n");
         return ;
     }
 
     // Check if nickname is already used by another user, otherwise, send error 433
     if (_clientsNick.find(nickname) != _clientsNick.end()) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NICKNAMEINUSE " " + nickname + " :Nickname is already in use\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NICKNAMEINUSE " " + nickname + " :Nickname is already in use\r\n");
         return ;
     }
     
@@ -80,7 +67,7 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
         std::string msg = ":" + client->getNickname() + "NICK :" + nickname + "\r\n";
         for (std::set<Channel*>::iterator it = client->getJoinedChannels().begin();
             it != client->getJoinedChannels().end(); ++it) {
-                //(*it)->broadcastToChannel(client, msg);
+                (*it)->broadcastToChannel(client, msg, *this);
         }
     }
 
@@ -93,20 +80,20 @@ void Server::_handlePass(Client *client, const std::vector<std::string> &params)
 
     // If client already sent valid password, send error 462
     if (client->hasSentPass()) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n");
         return ;
     }
 
     // If number of parameters is <2, send error 461
     if (params.size() < 1) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
         return ;
     }
 
     // Check password, if not valid, send error 464
     std::string password = params.at(0);
     if (password != Server::_servPassword) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_PASSWDMISMATCH " * :Password incorrect\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_PASSWDMISMATCH " * :Password incorrect\r\n");
         // Function to disconnect client
         return ;
     }
@@ -128,13 +115,13 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
 
     // If client already sent USER command, send error 462
     if (client->hasSentUser()) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n");
         return ;
     }
 
     // If number of parameters is <4, send error 461
     if (params.size() < 4) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
         return ;        
     }
 
@@ -145,8 +132,8 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
 
     // Check if username is valid, otherwise, send error 461 (there's no real error code for this)
     if (!validUsername(username)) {
-        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " " + client->getClientFd()
-        //    + ' ' + username + " :Not enough parameters\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " " + client->getClientFd()
+           + ' ' + username + " :Not enough parameters\r\n");
         return ;
     }
 

@@ -155,7 +155,7 @@ void Server::newClient( void )
     this->_fds[this->_clientNb] = newPoll;
     this->_clientNb++;
 
-    std::cout << "\033[31mClient <" << inFd << "> connected\033[m" << std::endl;
+    std::cout << GREEN "Client <" << inFd << "> connected" << RES << std::endl;
 }
 
 void    Server::clearBuff( void )
@@ -180,7 +180,7 @@ void    Server::clientInput( int fd )
 
     if (bytes <= 0)
     {
-        std::cerr << "\033[36mClient <" << fd << "> disconnected\033[m" << std::endl;
+        std::cerr << RED "Client <" << fd << "> disconnected" << RES << std::endl;
         clearClient(fd);
         this->_clientNb--;
         close(fd);
@@ -188,7 +188,7 @@ void    Server::clientInput( int fd )
     else
     {
         this->_buffer[bytes] = '\0';
-        std::cout << "\033[32mClient <" << fd << "> input: " << this->_buffer << "\033[m";
+        std::cout << GREEN "Client <" << fd << "> input: " << this->_buffer << RES;
         sendClientMessage(fd, this->_buffer);
     }
 }
