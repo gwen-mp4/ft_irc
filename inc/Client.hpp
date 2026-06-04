@@ -44,6 +44,9 @@ class Client
         //Getter:
         std::string getUsername( void ) const;
         std::string getNickname( void ) const;
+        std::string getRealName() const;
+        std::string getHostname() const;
+        std::string getServerName() const;
         std::string getclientIP( void ) const;
         int getClientFd( void ) const;
         std::set<Channel*>  getJoinedChannels() const;

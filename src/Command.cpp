@@ -68,7 +68,7 @@ void Command::parseCmd(std::string line) {
 		while (pos < line.size() && line.at(pos) == ' ') pos++;
 		if (pos >= line.size()) break ;
 		if (line.at(pos) == ':') {
-			_params.push_back(line.substr(pos + 1));
+			_params.push_back(line.substr(pos));
 			break ;
 		}
 		size_t	next_space = line.find(' ', pos);

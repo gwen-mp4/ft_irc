@@ -51,6 +51,18 @@ std::string Client::getNickname( void ) const
     return this->_nickname;
 }
 
+std::string Client::getRealName() const {
+    return this->_realname;
+}
+
+std::string Client::getHostname() const {
+    return this->_hostname;
+}
+
+std::string Client::getServerName() const {
+    return this->_serverName;
+}
+
 std::string Client::getclientIP( void ) const
 {
     return this->_clientIpAddr;

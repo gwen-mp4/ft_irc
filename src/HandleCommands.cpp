@@ -7,7 +7,7 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
     bool    isAuth = (msg.getCommandUpcase() == "PASS" || msg.getCommandUpcase() == "NICK" || msg.getCommandUpcase() == "USER");
 
     if (!client->isRegistered() && !isAuth) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NOTREGISTERED " * :You have not registered\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOTREGISTERED " * :You have not registered\r\n" RES);
         return ;
     }
 
@@ -18,7 +18,7 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
     else if (msg.getCommandUpcase() == "PRIVMSG") this->_handlePrivMsg(client, msg.getParams());
     else if (msg.getCommandUpcase() == "JOIN") this->_handleJoin(client, msg.getParams());
     else {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n" RES);
         return ;
     }
 }
@@ -44,22 +44,22 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     // If number of parameters is <1, that means no nickname were given
     // So send error 431
     if (params.size() < 1) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NONICKNAMEGIVEN " * :No nickname given\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NONICKNAMEGIVEN " * :No nickname given\r\n" RES);
         return ;
     }
 
     // Take the new nickname and verify if it respects the IRC norms, otherwise, send error 432
     std::string nickname = params.at(0);
     if (!validNickname(nickname)) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ERRONEUSNICKNAME " Client<" + ft_itoa(client->getClientFd())
-           + "> " + nickname + " :Erroneus nickname\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_ERRONEUSNICKNAME " Client<" + ft_itoa(client->getClientFd())
+           + "> " + nickname + " :Erroneus nickname\r\n" RES);
         return ;
     }
 
     // Check if nickname is already used by another user, otherwise, send error 433
     std::map<std::string, Client*>::iterator nickIt = _clientsNick.find(nickname);
     if (nickIt != _clientsNick.end() && nickIt->second != client) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NICKNAMEINUSE " " + nickname + " :Nickname is already in use\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NICKNAMEINUSE " " + nickname + " :Nickname is already in use\r\n" RES);
         return ;
     }
 
@@ -76,40 +76,52 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     
     // If client is already registered and wants to change nickname, inform all clients of the modification
     if (client->isRegistered()) {
-        std::string msg = ":" + client->getNickname() + "NICK :" + nickname + "\r\n";
-        for (std::set<Channel*>::iterator it = client->getJoinedChannels().begin();
-            it != client->getJoinedChannels().end(); ++it) {
+        std::set<Channel*> channels = client->getJoinedChannels();
+        if (!channels.empty()) {
+            std::string msg = BLUE ":" + oldNickname + "NICK :" + nickname + "\r\n" RES;
+            for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
                 (*it)->broadcastToChannel(client, msg, *this);
+            }
         }
     }
 
     client->setNickname(nickname);
     if (!client->isRegistered())
         client->setSentNick(true);
+
+    // If client is now registered, send welcome message
+    if (client->isRegistered()) {
+        this->sendWelcomeMessage(client);
+    }
 }
 
 void Server::_handlePass(Client *client, const std::vector<std::string> &params) {
 
     // If client already sent valid password, send error 462
     if (client->hasSentPass()) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n");
+        this->sendClientMessage(client->getClientFd(), YELLOW ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n" RES);
         return ;
     }
 
     // If number of parameters is <2, send error 461
     if (params.size() < 1) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
         return ;
     }
 
     // Check password, if not valid, send error 464
     std::string password = params.at(0);
     if (password != Server::_servPassword) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_PASSWDMISMATCH " * :Password incorrect\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_PASSWDMISMATCH " * :Password incorrect\r\n" RES);
         // Function to disconnect client
         return ;
     }
     client->setSentPass(true);
+
+    // If client is now registered, send welcome message
+    if (client->isRegistered()) {
+        this->sendWelcomeMessage(client);
+    }
 }
 
 bool    Server::validUsername(const std::string& username) const {
@@ -123,33 +135,17 @@ bool    Server::validUsername(const std::string& username) const {
     return true;
 }
 
-std::string Server::ft_itoa(int num) const {
-    std::string str;
-    if (num == 0)
-        return "0";
-    bool isNegative = num < 0;
-    if (isNegative)
-        num = -num;
-    while (num > 0) {
-        str.insert(str.begin(), '0' + (num % 10));
-        num /= 10;
-    }
-    if (isNegative)
-        str.insert(str.begin(), '-');
-    return str;
-}
-
 void Server::_handleUser(Client *client, const std::vector<std::string> &params) {
 
     // If client already sent USER command, send error 462
     if (client->hasSentUser()) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n");
+        this->sendClientMessage(client->getClientFd(), YELLOW ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n" RES);
         return ;
     }
 
     // If number of parameters is <4, send error 461
     if (params.size() < 4) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
         return ;        
     }
 
@@ -158,10 +154,18 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
     std::string serverName = params.at(2);
     std::string realName = params.at(3);
 
+    if (realName[0] != ':') {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
+        return ;
+    }
+    else if (realName[0] == ':') {
+        realName = realName.substr(1);
+    }
+
     // Check if username is valid, otherwise, send error 461 (there's no real error code for this)
     if (!validUsername(username)) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " Client <" + ft_itoa(client->getClientFd())
-           + "> " + username + " :Not enough parameters\r\n");
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " Client <" + ft_itoa(client->getClientFd())
+           + "> " + username + " :Not enough parameters\r\n" RES);
         return ;
     }
 
@@ -173,6 +177,11 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
     client->setServerName(serverName);
     client->setRealName(realName);
     client->setSentUser(true);
+
+    // If client is now registered, send welcome message
+    if (client->isRegistered()) {
+        this->sendWelcomeMessage(client);
+    }
 }
 
 // void Server::_handleOper(Client *client, const std::vector<std::string> &params) {
