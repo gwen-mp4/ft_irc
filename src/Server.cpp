@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/04 14:06:52 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 15:04:21 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,11 @@ void    Server::clearBuff( void )
 
 void    Server::clearClient( int fd )
 {
+    this->_clientsNick.erase(this->_clients[fd]->getNickname());
+    this->_clients[fd]->setSentPass(false);
+    this->_clients[fd]->setSentNick(false);
+    this->_clients[fd]->setSentUser(false);
+    this->_clients[fd]->setNickname("");
     delete this->_clients[fd];
     this->_clients.erase(fd);
 }
