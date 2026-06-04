@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/04 11:17:38 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 11:46:32 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ class Server
 
         static void    signalHandler( int sig );
         void    clearBuff( void );
+        void    clearClient( int fd );
         void    newClient( void );
         void    clientInput( int fd );
         
