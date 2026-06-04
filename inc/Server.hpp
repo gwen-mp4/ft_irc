@@ -6,12 +6,16 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/03 12:27:26 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 11:17:38 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 #define SERVER_HPP
+
+# ifndef BUFF_SIZE
+#  define BUFF_SIZE 1024
+# endif
 
 #include "Include.hpp"
 
@@ -29,7 +33,7 @@ class Server
         std::map<int, Client*>    _clients; // Using map for optimization with an int (FD) and pointer to Client
         std::map<std::string, Client*>  _clientsNick; // Searching clients by nickname
         std::string             _servPassword;
-        char                    _buffer[1024];
+        char                    _buffer[BUFF_SIZE];
         std::map<std::string, CmdHandler> _cmds;
         std::map<std::string, Channel*> _channels;
 

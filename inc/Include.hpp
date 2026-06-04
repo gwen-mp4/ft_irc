@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:59:07 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/03 11:31:31 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 11:17:49 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@
 #  define PORT_MAX 65535
 # endif
 
-
+// # ifndef BUFF_SIZE
+// #  define BUFF_SIZE 1024
+// # endif
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/04 11:05:01 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 11:13:46 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,8 @@ Server::~Server( void )
 // // Send a message to client with the code (defined in ServerCodeIRC.hpp)
 void    Server::sendClientMessage(int clientFD, std::string message)
 {
-    std::string p1 = clientFD + "0";
-    std::string p2 = "\033[96mClient: " + message + "\033[m";
-
-    if (send(clientFD, p2.c_str(), p2.size(), 0) == -1)
+    if (send(clientFD, message.c_str(), message.size(), 0) == -1)
         std::cerr << "send() failed." << std::endl;
-    //send(clientFD, message.c_str(), message.size(), 0);
-    //treatCommand(this->_clients[clientFD], message);
 }
 
 
@@ -165,7 +160,7 @@ void Server::newClient( void )
 
 void    Server::clearBuff( void )
 {
-    for (int i = 0; i < 1024; i++)
+    for (int i = 0; i < BUFF_SIZE; i++)
     {
         this->_buffer[i] = 0;
     }
