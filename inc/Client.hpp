@@ -17,9 +17,12 @@
 
 class Client
 {
-    protected:
+    private:
         std::string _username;
         std::string _nickname;
+        std::string _realname;
+        std::string _serverName;
+        std::string _hostname;
         std::string _clientIpAddr;
         int         _clientFd;
 
@@ -53,6 +56,9 @@ class Client
         //Setter
         void    setUsername( const std::string& username );
         void    setNickname( const std::string& nickname );
+        void    setRealName( const std::string& realname );
+        void    setHostname( const std::string& hostname );
+        void    setServerName( const std::string& servername );
         void    setClientIP( const std::string& clientIP );
         void    setClientFd( const int& fd );
         void    setSentPass(bool status);

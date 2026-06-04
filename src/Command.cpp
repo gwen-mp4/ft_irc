@@ -12,22 +12,7 @@
 
 #include "../inc/Command.hpp"
 
-// // To remove
-// void	sanitizeLine(std::string line) {
-// 	if (!line.empty() && line.size() - 1 == '\n')
-// 		line.erase(line.size() - 1);
-// 	if (!line.empty() && line.size() - 1 == '\r')
-// 		line.erase(line.size() - 1);
-// }
-
-Command::Command(std::string& line) : _prefix(""), _command("") {
-	try {
-		//sanitizeLine(line);
-		Command::_parseCmd(line);
-	} catch (const std::exception& e) {
-		throw std::runtime_error("parse failed: " + std::string(e.what()));
-	}
-}
+Command::Command() : _prefix(""), _command("") {}
 
 Command::Command(const Command &other) {
 	*this = other;
@@ -44,7 +29,7 @@ Command &Command::operator=(const Command &other) {
 
 Command::~Command() {}
 
-void Command::_parseCmd(std::string line) {
+void Command::parseCmd(std::string line) {
 	size_t	pos = 0;
 
 	if (line.empty() || line.find_first_not_of(" \r\n") == std::string::npos)
@@ -91,13 +76,13 @@ void Command::_parseCmd(std::string line) {
 		}
 	}
 
-	// // DEBUG
-	// std::cout << "PREFIX : [" << _prefix << "]\n";
-	// std::cout << "CMD : [" << _command << "]\n";
-	// std::cout << "NB ARGS: " << _params.size() << "\n";
-	// for (size_t i = 0; i < _params.size(); ++i) {
-	// 	std::cout << "Arg " << i << ": [" << _params.at(i) << "]\n";
-	// }
+	// DEBUG
+	std::cout << "PREFIX : [" << _prefix << "]\n";
+	std::cout << "CMD : [" << _command << "]\n";
+	std::cout << "NB ARGS: " << _params.size() << "\n";
+	for (size_t i = 0; i < _params.size(); ++i) {
+		std::cout << "Arg " << i << ": [" << _params.at(i) << "]\n";
+	}
 }
 
 std::string Command::getPrefix() const {
@@ -129,8 +114,6 @@ std::vector<std::string> Command::getParams() const {
 // 				std::cout << "> ";
 // 				continue ;
 // 		}
-// 		Command	Command(line);
-// 		std::cout << Command.getCommand() << "\n";
 // 	}
 // 	return 0;
 // }

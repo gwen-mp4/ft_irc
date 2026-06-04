@@ -20,14 +20,14 @@ class Command {
 		std::string	_prefix;
 		std::string	_command;
 		std::vector<std::string>	_params;
-		
-		void	_parseCmd(std::string line);
 
 	public:
-		Command(std::string&	line);
+		Command();
 		Command(const Command& other);
 		Command& operator=(const Command& other);
 		~Command();
+
+		void	parseCmd(std::string line);
 
 		std::string	getPrefix() const;
 		std::string	getCommand() const;

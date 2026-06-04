@@ -1,7 +1,21 @@
 #include "../inc/Server.hpp"
 
+// // To remove
+// void	sanitizeLine(std::string line) {
+// 	if (!line.empty() && line.size() - 1 == '\n')
+// 		line.erase(line.size() - 1);
+// 	if (!line.empty() && line.size() - 1 == '\r')
+// 		line.erase(line.size() - 1);
+// }
+
 void    Server::treatCommand(Client* client, std::string raw_line) {
-    Command msg(raw_line); // Parse the raw command into a Command object
+    Command msg; // Parse the raw command into a Command object
+    try {
+		//sanitizeLine(raw_line);
+		msg.parseCmd(raw_line);
+	} catch (const std::exception& e) {
+		throw std::runtime_error("parse failed: " + std::string(e.what()));
+	}
     
     if (msg.getCommandUpcase() != "PASS" && msg.getCommandUpcase() != "NICK" && msg.getCommandUpcase() != "USER" && !client->isRegistered()) {
         std::cout << "Client not registered, cannot execute command: " << msg.getCommand() << std::endl;
@@ -22,7 +36,7 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
     }
 }
 
-bool    Server::validNickname(const std::string& nickname) {
+bool    Server::validNickname(const std::string& nickname) const {
 
     // This norms follows the norms given by GeekShed IRC Network
     if (nickname.empty() || nickname.length() > 30)
@@ -40,15 +54,15 @@ bool    Server::validNickname(const std::string& nickname) {
 
 void Server::_handleNick(Client *client, const std::vector<std::string> &params) {
 
-    // If number of parameters is <2, that means no nickname were given
+    // If number of parameters is <1, that means no nickname were given
     // So send error 431
-    if (params.size() < 2) {
+    if (params.size() < 1) {
         //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NONICKNAMEGIVEN " * :No nickname given\r\n");
         return ;
     }
 
     // Take the new nickname and verify if it respects the IRC norms, otherwise, send error 432
-    std::string nickname = params.at(1);
+    std::string nickname = params.at(0);
     if (!validNickname(nickname)) {
         //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ERRONEUSNICKNAME " " + client->getClientFd()
         //    + ' ' + nickname + " :Erroneus nickname\r\n");
@@ -84,13 +98,13 @@ void Server::_handlePass(Client *client, const std::vector<std::string> &params)
     }
 
     // If number of parameters is <2, send error 461
-    if (params.size() < 2) {
+    if (params.size() < 1) {
         //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
         return ;
     }
 
     // Check password, if not valid, send error 464
-    std::string password = params.at(1);
+    std::string password = params.at(0);
     if (password != Server::_servPassword) {
         //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_PASSWDMISMATCH " * :Password incorrect\r\n");
         // Function to disconnect client
@@ -99,9 +113,51 @@ void Server::_handlePass(Client *client, const std::vector<std::string> &params)
     client->setSentPass(true);
 }
 
+bool    Server::validUsername(const std::string& username) const {
+    if (username.empty() || username.length() > 10)
+        return false;
+    for (size_t i = 0; i < username.length(); ++i) {
+        char    c = username.at(i);
+        if (!std::isalnum(c) && c != '_' && c != '-')
+            return false;
+    }
+    return true;
+}
+
 void Server::_handleUser(Client *client, const std::vector<std::string> &params) {
-    (void) client;
-    (void) params;
+
+    // If client already sent USER command, send error 462
+    if (client->hasSentUser()) {
+        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ALREADYREGISTRED " * :You may not reregister\r\n");
+        return ;
+    }
+
+    // If number of parameters is <4, send error 461
+    if (params.size() < 4) {
+        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n");
+        return ;        
+    }
+
+    std::string username = params.at(0);
+    std::string hostname = params.at(1);
+    std::string serverName = params.at(2);
+    std::string realName = params.at(3);
+
+    // Check if username is valid, otherwise, send error 461 (there's no real error code for this)
+    if (!validUsername(username)) {
+        //this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " " + client->getClientFd()
+        //    + ' ' + username + " :Not enough parameters\r\n");
+        return ;
+    }
+
+    if (hostname.empty())
+        hostname = "unknown";
+    
+    client->setUsername(username);
+    client->setHostname(hostname);
+    client->setServerName(serverName);
+    client->setRealName(realName);
+    client->setSentUser(true);
     std::cout << "User handler called\n";
 }
 
@@ -147,7 +203,7 @@ void Server::_handlePrivMsg(Client *client, const std::vector<std::string> &para
 
 // int main() {
 //     Server server(6667, "hi");
-//     // 1. On crée un faux client avec un FD fictif (ex: 42)
+//     // 1. On crée un faux client avec un FD fictif
 //     Client* fake_client = new Client("user", "nick");
 
 //     std::cout << "--- TEST 1 : Inscription ---" << std::endl;
@@ -160,7 +216,6 @@ void Server::_handlePrivMsg(Client *client, const std::vector<std::string> &para
 //     // On simule un JOIN
 //     server.treatCommand(fake_client, "JOIN #42");
 
-//     // N'oublie pas de print dans tes handle pour voir si ça passe !
 //     delete fake_client;
 //     return 0;
 // }
