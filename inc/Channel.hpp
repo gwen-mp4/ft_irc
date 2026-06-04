@@ -16,6 +16,7 @@
 #include "Include.hpp"
 
 class Client;
+class Server;
 
 class Channel
 {
@@ -54,7 +55,7 @@ class Channel
         // void    setPassword( std::string newPassW );
         // void    setTpoic( std::string newTopic );
 
-        //void    Channel::broadcastToChannel(Client* sender, std::string message);
+        void    broadcastToChannel(Client* sender, std::string message, Server& server);
 };
 
 #endif

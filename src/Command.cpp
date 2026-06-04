@@ -29,9 +29,17 @@ Command &Command::operator=(const Command &other) {
 
 Command::~Command() {}
 
+void	Command::sanitizeLine(std::string line) {
+	if (!line.empty() && line.size() - 1 == '\n')
+		line.erase(line.size() - 1);
+	if (!line.empty() && line.size() - 1 == '\r')
+		line.erase(line.size() - 1);
+}
+
 void Command::parseCmd(std::string line) {
 	size_t	pos = 0;
 
+	sanitizeLine(line);
 	if (line.empty() || line.find_first_not_of(" \r\n") == std::string::npos)
 		return ;
 	
@@ -76,13 +84,13 @@ void Command::parseCmd(std::string line) {
 		}
 	}
 
-	// DEBUG
-	std::cout << "PREFIX : [" << _prefix << "]\n";
-	std::cout << "CMD : [" << _command << "]\n";
-	std::cout << "NB ARGS: " << _params.size() << "\n";
-	for (size_t i = 0; i < _params.size(); ++i) {
-		std::cout << "Arg " << i << ": [" << _params.at(i) << "]\n";
-	}
+	// // DEBUG
+	// std::cout << "PREFIX : [" << _prefix << "]\n";
+	// std::cout << "CMD : [" << _command << "]\n";
+	// std::cout << "NB ARGS: " << _params.size() << "\n";
+	// for (size_t i = 0; i < _params.size(); ++i) {
+	// 	std::cout << "Arg " << i << ": [" << _params.at(i) << "]\n";
+	// }
 }
 
 std::string Command::getPrefix() const {
