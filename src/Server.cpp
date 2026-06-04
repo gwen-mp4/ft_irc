@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/04 12:25:22 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/04 13:23:25 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,9 @@ void    Server::clientInput( int fd )
     }
     else
     {
-        this->_buffer[bytes] = '\0';
-        std::cout << GREEN "Client <" << fd << "> input: " << this->_buffer << RES;
+
+        this->_buffer[bytes - 1] = '\0';
+        std::cout << GREEN "Client <" << fd << "> input: " << this->_buffer << RES << std::endl;
         treatCommand(this->_clients[fd], this->_buffer);
         //sendClientMessage(fd, this->_buffer);
     }
