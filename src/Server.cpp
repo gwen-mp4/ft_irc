@@ -17,8 +17,7 @@ Server::Server( const int& port, const std::string& password) :
     _socket(-1),
     _clientNb(1),
     _servPassword(password),
-    _version(1.0),
-    _startTime(0.0) {
+    _version(1.0) {
 
     _cmds["NICK"] = &Server::_handleNick;
     _cmds["PASS"] = &Server::_handlePass;
@@ -51,7 +50,6 @@ Server& Server::operator=( Server const & other )
         this->_cmds = other._cmds;
         this->_channels = other._channels;
         this->_version = other._version;
-        this->_startTime = other._startTime;
     }
     return (*this);
 }
