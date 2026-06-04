@@ -1,6 +1,9 @@
 #include "../inc/Server.hpp"
 
 void    Server::treatCommand(Client* client, std::string raw_line) {
+    if (raw_line.empty() || raw_line.find_first_not_of(" \r\n") == std::string::npos)
+        return ;
+
     Command msg; // Parse the raw command into a Command object
 	msg.parseCmd(raw_line);
     
