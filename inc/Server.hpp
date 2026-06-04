@@ -36,6 +36,8 @@ class Server
         char                    _buffer[BUFF_SIZE];
         std::map<std::string, CmdHandler> _cmds;
         std::map<std::string, Channel*> _channels;
+        float                   _version;
+        double                  _startTime;
 
         void    _handleNick(Client* client, const std::vector<std::string>& params);
         void    _handlePass(Client* client, const std::vector<std::string>& params);
@@ -56,13 +58,12 @@ class Server
         Server& operator=( Server const & other );
         ~Server( void );
 
-        std::string ft_itoa(int num) const;
-
         bool    validNickname(const std::string& nickname) const;
         bool    validUsername(const std::string& username) const;
         void    treatCommand(Client* client, std::string raw_line);
 
-        void    sendClientMessage(int clientFD, std::string message);
+        void    sendClientMessage(int clientFD, std::string message) const;
+        void    sendWelcomeMessage(Client* client) const;
 
         // For now, we don't need it or won't need it for later
         // //Getter:
@@ -85,7 +86,13 @@ class Server
         void    clearClient( int fd );
         void    newClient( void );
         void    clientInput( int fd );
+
+        char*    getDate( void ) const;
         
+        template <typename T>
+        std::string ft_itoa(T num) const;
 };
+
+# include "Utils.tpp"
 
 #endif

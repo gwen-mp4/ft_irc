@@ -29,5 +29,7 @@ TODO:   Cleanly destroy a client when it disconnects.
 ## (for storck)
 -If you can, create the function to send message to client asap so I will be able to test and correct it early
 
-*04/06 13:15 by gwen*:
+*04/06 17:00 by gwen*:
 -Connection works, need to properly destroy everything the client has when he disconnects, otherwise the server will remember it and some commands may no work such as USER
+-Command USER, NICK and PASS works (need to add disconnect function in PASS if it's pass wrong)
+-Added welcome code

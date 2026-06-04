@@ -30,6 +30,7 @@
 # include <exception>
 # include <algorithm>
 # include <bits/stdc++.h>
+# include <ctime>
 
 # include "Channel.hpp"
 # include "Client.hpp"

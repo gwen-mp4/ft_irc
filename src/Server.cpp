@@ -16,8 +16,10 @@ Server::Server( const int& port, const std::string& password) :
     _port(port), 
     _socket(-1),
     _clientNb(1),
-    _servPassword(password) {
-    
+    _servPassword(password),
+    _version(1.0),
+    _startTime(0.0) {
+
     _cmds["NICK"] = &Server::_handleNick;
     _cmds["PASS"] = &Server::_handlePass;
     _cmds["USER"] = &Server::_handleUser;
@@ -47,6 +49,9 @@ Server& Server::operator=( Server const & other )
         this->_clientsNick = other._clientsNick;
         this->_servPassword = other._servPassword;
         this->_cmds = other._cmds;
+        this->_channels = other._channels;
+        this->_version = other._version;
+        this->_startTime = other._startTime;
     }
     return (*this);
 }
@@ -60,8 +65,31 @@ Server::~Server( void )
     // }
 }
 
+char*    Server::getDate( void ) const {
+    time_t  currentTime = time(NULL);
+    time(&currentTime);
+    char *time_str = ctime(&currentTime);
+    time_str[std::strcspn(time_str, "\r\n")] = '\0';
+    return time_str;
+}
+
+void    Server::sendWelcomeMessage(Client* client) const {
+    std::string welcomeMsg = GREEN ":ircserv " RPL_WELCOME " :Welcome to the Internet Relay Network "
+        + client->getNickname() + '!' + client->getUsername() + '@' + client->getHostname() + "\r\n" RES;
+    std::string welcomeMsg2 = GREEN ":ircserv " RPL_YOURHOST " :Your host is "
+        + client->getServerName() + ", running version " + ft_itoa(this->_version) + "\r\n" RES;
+    std::string welcomeMsg3 = GREEN ":ircserv " RPL_CREATED " :This server was created on "
+        + std::string(this->getDate()) + "\r\n" RES;
+    std::string welcomeMsg4 = GREEN ":ircserv " RPL_MYINFO " " + client->getServerName() + " " + ft_itoa(this->_version)
+        + " iow tkoli\r\n" RES;
+    sendClientMessage(client->getClientFd(), welcomeMsg);
+    sendClientMessage(client->getClientFd(), welcomeMsg2);
+    sendClientMessage(client->getClientFd(), welcomeMsg3);
+    sendClientMessage(client->getClientFd(), welcomeMsg4);
+}
+
 // // Send a message to client with the code (defined in ServerCodeIRC.hpp)
-void    Server::sendClientMessage(int clientFD, std::string message)
+void    Server::sendClientMessage(int clientFD, std::string message) const
 {
     if (send(clientFD, message.c_str(), message.size(), 0) == -1)
         std::cerr << "send() failed." << std::endl;
