@@ -4,8 +4,9 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
     Command msg; // Parse the raw command into a Command object
 	msg.parseCmd(raw_line);
     
-    if (msg.getCommandUpcase() != "PASS" && msg.getCommandUpcase() != "NICK" && msg.getCommandUpcase() != "USER" && !client->isRegistered()) {
-        std::cout << "Client not registered, cannot execute command: " << msg.getCommand() << std::endl;
+    bool    isAuth = (msg.getCommandUpcase() == "PASS" || msg.getCommandUpcase() == "NICK" || msg.getCommandUpcase() == "USER");
+
+    if (!client->isRegistered() && !isAuth) {
         this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NOTREGISTERED " * :You have not registered\r\n");
         return ;
     }
@@ -17,7 +18,6 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
     else if (msg.getCommandUpcase() == "PRIVMSG") this->_handlePrivMsg(client, msg.getParams());
     else if (msg.getCommandUpcase() == "JOIN") this->_handleJoin(client, msg.getParams());
     else {
-        std::cout << "Unknown command: " << msg.getCommand() << std::endl;
         this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n");
         return ;
     }
@@ -51,18 +51,30 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     // Take the new nickname and verify if it respects the IRC norms, otherwise, send error 432
     std::string nickname = params.at(0);
     if (!validNickname(nickname)) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ERRONEUSNICKNAME " " + client->getClientFd()
-           + ' ' + nickname + " :Erroneus nickname\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_ERRONEUSNICKNAME " Client<" + ft_itoa(client->getClientFd())
+           + "> " + nickname + " :Erroneus nickname\r\n");
         return ;
     }
 
     // Check if nickname is already used by another user, otherwise, send error 433
-    if (_clientsNick.find(nickname) != _clientsNick.end()) {
+    std::map<std::string, Client*>::iterator nickIt = _clientsNick.find(nickname);
+    if (nickIt != _clientsNick.end() && nickIt->second != client) {
         this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NICKNAMEINUSE " " + nickname + " :Nickname is already in use\r\n");
         return ;
     }
+
+    // Remove the old nickname mapping if this client already had one
+    std::string oldNickname = client->getNickname();
+    if (!oldNickname.empty()) {
+        std::map<std::string, Client*>::iterator oldIt = _clientsNick.find(oldNickname);
+        if (oldIt != _clientsNick.end() && oldIt->second == client)
+            _clientsNick.erase(oldIt);
+    }
+
+    // Store the new nickname for this client
+    _clientsNick[nickname] = client;
     
-    // If client if already registered and want to change nickname, inform all clients of the modification
+    // If client is already registered and wants to change nickname, inform all clients of the modification
     if (client->isRegistered()) {
         std::string msg = ":" + client->getNickname() + "NICK :" + nickname + "\r\n";
         for (std::set<Channel*>::iterator it = client->getJoinedChannels().begin();
@@ -111,6 +123,22 @@ bool    Server::validUsername(const std::string& username) const {
     return true;
 }
 
+std::string Server::ft_itoa(int num) const {
+    std::string str;
+    if (num == 0)
+        return "0";
+    bool isNegative = num < 0;
+    if (isNegative)
+        num = -num;
+    while (num > 0) {
+        str.insert(str.begin(), '0' + (num % 10));
+        num /= 10;
+    }
+    if (isNegative)
+        str.insert(str.begin(), '-');
+    return str;
+}
+
 void Server::_handleUser(Client *client, const std::vector<std::string> &params) {
 
     // If client already sent USER command, send error 462
@@ -132,8 +160,8 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
 
     // Check if username is valid, otherwise, send error 461 (there's no real error code for this)
     if (!validUsername(username)) {
-        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " " + client->getClientFd()
-           + ' ' + username + " :Not enough parameters\r\n");
+        this->sendClientMessage(client->getClientFd(), ":ircserv " ERR_NEEDMOREPARAMS " Client <" + ft_itoa(client->getClientFd())
+           + "> " + username + " :Not enough parameters\r\n");
         return ;
     }
 
@@ -145,7 +173,6 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
     client->setServerName(serverName);
     client->setRealName(realName);
     client->setSentUser(true);
-    std::cout << "User handler called\n";
 }
 
 // void Server::_handleOper(Client *client, const std::vector<std::string> &params) {
