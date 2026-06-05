@@ -82,13 +82,13 @@ void Command::parseCmd(std::string line) {
 		}
 	}
 
-	// DEBUG
-	std::cout << "PREFIX : [" << _prefix << "]\n";
-	std::cout << "CMD : [" << _command << "]\n";
-	std::cout << "NB ARGS: " << _params.size() << "\n";
-	for (size_t i = 0; i < _params.size(); ++i) {
-		std::cout << "Arg " << i << ": [" << _params.at(i) << "]\n";
-	}
+	// // DEBUG
+	// std::cout << "PREFIX : [" << _prefix << "]\n";
+	// std::cout << "CMD : [" << _command << "]\n";
+	// std::cout << "NB ARGS: " << _params.size() << "\n";
+	// for (size_t i = 0; i < _params.size(); ++i) {
+	// 	std::cout << "Arg " << i << ": [" << _params.at(i) << "]\n";
+	// }
 }
 
 std::string Command::getPrefix() const {

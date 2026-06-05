@@ -37,6 +37,7 @@ class Server
         std::map<std::string, CmdHandler> _cmds;
         std::map<std::string, Channel*> _channels;
         float                   _version;
+        char*                   _creationTime;
 
         void    _handleNick(Client* client, const std::vector<std::string>& params);
         void    _handlePass(Client* client, const std::vector<std::string>& params);
@@ -86,7 +87,7 @@ class Server
         void    newClient( void );
         void    clientInput( int fd );
 
-        char*    getDate( void ) const;
+        char*    getCreationDate( void ) const;
         
         template <typename T>
         std::string ft_itoa(T num) const;

@@ -12,9 +12,31 @@
 
 #include "../inc/Include.hpp"
 
-Client::Client( void ) : _username(""), _nickname("") {}
+Client::Client( void ) :
+    _username(""),
+    _nickname(""),
+    _realname(""),
+    _serverName(""),
+    _hostname(""),
+    _clientIpAddr(""),
+    _clientFd(-1),
+    _isOperator(false),
+    _hasEnteredPass(false),
+    _hasGivenNick(false),
+    _hasGivenUser(false) {}
 
-Client::Client( const std::string& name, const std::string& nick ) : _username(name), _nickname(nick) {}
+Client::Client( const std::string& name, const std::string& nick ) :
+    _username(name),
+    _nickname(nick),
+    _realname(""),
+    _serverName(""),
+    _hostname(""),
+    _clientIpAddr(""),
+    _clientFd(-1),
+    _isOperator(false),
+    _hasEnteredPass(false),
+    _hasGivenNick(false),
+    _hasGivenUser(false) {}
 
 Client::Client( Client const & other )
 {
@@ -29,6 +51,13 @@ Client& Client::operator=( Client const & other )
         this->_clientIpAddr = other._clientIpAddr;
         this->_nickname = other._nickname;
         this->_username = other._username;
+        this->_realname = other._realname;
+        this->_hostname = other._hostname;
+        this->_serverName = other._serverName;
+        this->_hasGivenNick = other._hasGivenNick;
+        this->_hasEnteredPass = other._hasEnteredPass;
+        this->_hasGivenUser = other._hasGivenUser;
+        this->_joinedChannels = other._joinedChannels;
     }
     return (*this);
 }

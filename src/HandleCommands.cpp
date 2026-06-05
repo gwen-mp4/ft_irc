@@ -14,12 +14,11 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
         return ;
     }
 
-    // Temporary if/else, later change to pointer function and add the rest of command
-    if (msg.getCommandUpcase() == "PASS") this->_handlePass(client, msg.getParams());
-    else if (msg.getCommandUpcase() == "NICK") this->_handleNick(client, msg.getParams());
-    else if (msg.getCommandUpcase() == "USER") this->_handleUser(client, msg.getParams());
-    else if (msg.getCommandUpcase() == "PRIVMSG") this->_handlePrivMsg(client, msg.getParams());
-    else if (msg.getCommandUpcase() == "JOIN") this->_handleJoin(client, msg.getParams());
+    // Function pointer to handle commands, if command is not found, send error 421
+    if (_cmds.count(msg.getCommandUpcase())) {
+        (this->*(_cmds[msg.getCommandUpcase()]))(client, msg.getParams());
+        return ;
+    }
     else {
         this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_UNKNOWNCOMMAND " * " + msg.getCommand() + " :Unknown command\r\n" RES);
         return ;

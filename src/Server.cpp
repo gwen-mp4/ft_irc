@@ -17,7 +17,8 @@ Server::Server( const int& port, const std::string& password) :
     _socket(-1),
     _clientNb(1),
     _servPassword(password),
-    _version(1.0) {
+    _version(1.0),
+    _creationTime(getCreationDate()) {
 
     _cmds["NICK"] = &Server::_handleNick;
     _cmds["PASS"] = &Server::_handlePass;
@@ -63,7 +64,7 @@ Server::~Server( void )
     // }
 }
 
-char*    Server::getDate( void ) const {
+char*    Server::getCreationDate( void ) const {
     time_t  currentTime = time(NULL);
     time(&currentTime);
     char *time_str = ctime(&currentTime);
@@ -77,7 +78,7 @@ void    Server::sendWelcomeMessage(Client* client) const {
     std::string welcomeMsg2 = GREEN ":ircserv " RPL_YOURHOST " :Your host is "
         + client->getServerName() + ", running version " + ft_itoa(this->_version) + "\r\n" RES;
     std::string welcomeMsg3 = GREEN ":ircserv " RPL_CREATED " :This server was created on "
-        + std::string(this->getDate()) + "\r\n" RES;
+        + std::string(this->_creationTime) + "\r\n" RES;
     std::string welcomeMsg4 = GREEN ":ircserv " RPL_MYINFO " " + client->getServerName() + " " + ft_itoa(this->_version)
         + " iow tkoli\r\n" RES;
     sendClientMessage(client->getClientFd(), welcomeMsg);
@@ -186,7 +187,7 @@ void Server::newClient( void )
 
 void    Server::clearBuff( void )
 {
-    for (int i = 0; i < BUFF_SIZE; i++)
+    for (int i = 0; i < BUFF_SIZE; ++i)
     {
         this->_buffer[i] = 0;
     }
@@ -254,7 +255,7 @@ void    Server::run( void )
         if (reServSock == 0)
             throw(std::runtime_error("poll() failed"));
 
-        for (unsigned int i = 0; i < this->_clientNb; i++)
+        for (unsigned int i = 0; i < this->_clientNb; ++i)
         {
             if (this->_fds[i].revents & POLLIN)
             {
@@ -269,7 +270,7 @@ void    Server::run( void )
     std::cout << "ClOSING SERVER." << std::endl;
 
     int nfds = this->_clientNb;
-    for (int i = 0; i < nfds; i++)
+    for (int i = 0; i < nfds; ++i)
     {
         if (this->_fds[i].fd >= 0)
         {
