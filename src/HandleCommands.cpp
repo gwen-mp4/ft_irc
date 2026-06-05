@@ -201,43 +201,22 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
 // }
 
 void Server::_handleQuit(Client *client, const std::vector<std::string> &params) {
-    if (params.size() < 1) {
-        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
-        return ;        
-    }
+    (void)params;
 
-    std::string chan_name = params.at(0);
-    Channel     *chan;
+    this->sendClientMessage(client->getClientFd(), BLUE "Good bye, nice to see you.\r\n" RES);
 
-    // try {
-    //     chan = this->_channels.at(chan_name);
-    // }
-    // catch(const std::out_of_range& e) {
-    //     this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
-    //     return ;
-    // }
-    
-    if (this->_channels.count(chan_name) == 0) {
-        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
-        return ;
-    }
-    chan = this->_channels.at(chan_name);
+    int fd = client->getClientFd();
 
-    if (!(chan->getMembers()[client->getClientFd()]))
-    {
-        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOTONCHANNEL + client->getNickname() + " " + chan_name + " * :You're not on that channel\r\n" RES);
-        return ;
-    }
+    std::cerr << RED "Client <" << fd << "> disconnected" << RES << std::endl;
+    clearClient(fd);
+    close(fd);
+    for (size_t i = 0; i < this->_fds.size(); i++){
+	    if (this->_fds[i].fd == fd)
+		    this->_fds.erase(this->_fds.begin() + i);
+	}
+    this->_clientNb--;
 
-    if (chan->getOperators()[client->getClientFd()])
-    {
-        chan->getOperators().erase(client->getClientFd());
-    }
-
-    chan->getMembers().erase(client->getClientFd());
-    client->getJoinedChannels().erase(chan);
-
-    //std::cout << "Kick handler called\n";
+    //std::cout << "Quit handler called\n";
 }
 
 void Server::_handleJoin(Client *client, const std::vector<std::string> &params) {
@@ -297,9 +276,35 @@ void Server::_handleJoin(Client *client, const std::vector<std::string> &params)
     // std::cout << "Join handler called\n";
 }
 
-// void Server::_handlePart(Client *client, const std::vector<std::string> &params) {
+void Server::_handlePart(Client *client, const std::vector<std::string> &params) {
+    if (params.size() < 1) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
+        return ;        
+    }
 
-// }
+    std::string chan_name = params.at(0);
+    Channel     *chan;
+    
+    if (this->_channels.count(chan_name) == 0) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
+        return ;
+    }
+    chan = this->_channels.at(chan_name);
+
+    if (!(chan->getMembers()[client->getClientFd()]))
+    {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOTONCHANNEL + client->getNickname() + " " + chan_name + " * :You're not on that channel\r\n" RES);
+        return ;
+    }
+
+    if (chan->getOperators()[client->getClientFd()])
+    {
+        chan->getOperators().erase(client->getClientFd());
+    }
+
+    chan->getMembers().erase(client->getClientFd());
+    client->getJoinedChannels().erase(chan);
+}
 
 // void Server::_handleTopic(Client *client, const std::vector<std::string> &params) {
 
