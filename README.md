@@ -1,4 +1,5 @@
 # Problems:
+-If two servers with the same port connects, only one will work and the other will have leaks
 -There are leaks (and probably FDs leaks) when we close the server first before all clients are disconnected
 -NICK's broadcast doesn't work when changing nickname, need to see why
 
