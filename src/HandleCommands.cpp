@@ -203,13 +203,19 @@ void Server::_handleQuit(Client *client, const std::vector<std::string> &params)
     std::string chan_name = params.at(0);
     Channel     *chan;
 
-    try {
-        chan = this->_channels.at(chan_name);
-    }
-    catch(const std::out_of_range& e) {
+    // try {
+    //     chan = this->_channels.at(chan_name);
+    // }
+    // catch(const std::out_of_range& e) {
+    //     this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
+    //     return ;
+    // }
+    
+    if (this->_channels.count(chan_name) == 0) {
         this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
         return ;
     }
+    chan = this->_channels.at(chan_name);
 
     if (!(chan->getMembers()[client->getClientFd()]))
     {
@@ -278,13 +284,19 @@ void Server::_handleKick(Client *client, const std::vector<std::string> &params)
     std::string chan_name = params.at(0);
     Channel     *chan;
 
-    try {
-        chan = this->_channels.at(chan_name);
-    }
-    catch(const std::out_of_range& e) {
+    // try {
+    //     chan = this->_channels.at(chan_name);
+    // }
+    // catch(const std::out_of_range& e) {
+    //     this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
+    //     return ;
+    // }
+    if (this->_channels.count(chan_name) == 0)
+    {
         this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
         return ;
     }
+    chan = this->_channels.at(chan_name);
 
     if (!(chan->getOperators()[client->getClientFd()]))
     {
@@ -295,13 +307,19 @@ void Server::_handleKick(Client *client, const std::vector<std::string> &params)
     std::string victim_name = params.at(1);
     Client      *victim;
 
-    try {
-        victim = this->_clientsNick[victim_name];
-    }
-    catch(const std::out_of_range& e) {
+    // try {
+    //     victim = this->_clientsNick[victim_name];
+    // }
+    // catch(const std::out_of_range& e) {
+    //     this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHNICK + victim_name + " * :No such nickname\r\n" RES);
+    //     return ;
+    // }
+    if (this->_clientsNick.count(victim_name) == 0)
+    {
         this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHNICK + victim_name + " * :No such nickname\r\n" RES);
         return ;
     }
+    victim = this->_clientsNick.at(victim_name);
 
     if (!(chan->getMembers()[victim->getClientFd()]))
     {
