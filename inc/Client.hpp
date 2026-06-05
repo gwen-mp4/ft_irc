@@ -36,7 +36,7 @@ class Client
 
     public:
         Client( void );
-        Client( const std::string& name, const std::string& nick );
+        //Client( const std::string& name, const std::string& nick );
         Client( Client const & other );
         Client& operator=( Client const & other );
         ~Client( void );
@@ -50,6 +50,7 @@ class Client
         std::string getclientIP( void ) const;
         int getClientFd( void ) const;
         std::set<Channel*>  getJoinedChannels() const;
+        bool    isOperator() const;
         bool    hasSentNick() const;
         bool    hasSentPass() const;
         bool    hasSentUser() const;

@@ -35,15 +35,4 @@ TODO:   Cleanly destroy a client when it disconnects.
 -Added welcome code
 
 *05/06 12:30 by gwen*:
-
-# Maneuver to get these problems with "valgrind --track-fds=yes --leak-check=full --show-leak-kinds=all"
-### Execute the server and then CTRL+C
-Conditional jump or move depends on uninitialised value(s)
-   at 0x40627E: Server::run() (Server.cpp:262)
-   by 0x4121A0: main (main.cpp:38)
-
-### Execute the server, execute the client, write a command via client and then CTRL+C with server
-at operator new(unsigned long) (vg_replace_malloc.c:501)
-    by Server::newClient() (Server.cpp:157)
-    by Server::run() (Server.cpp:265)
-    by main (main.cpp:38)
+-Added JOIN command, FINALLY IT WORKS!!! (no leaks and FDs leaks) Need to fix problem with multiple join and isOperator() message

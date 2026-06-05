@@ -57,11 +57,19 @@ Server& Server::operator=( Server const & other )
 
 Server::~Server( void )
 {
-    // Don't need to delete because a container frees itself when destructor is called
-    // for (unsigned int i = 0; i < this->_clientNb; ++i)
-    // {
-    //     delete this->_clients[i];
-    // }
+    for (std::map<int, Client*>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+        if (it->second) {
+            close(it->second->getClientFd());
+            delete it->second;
+        }
+    }
+    _clients.clear();
+    for (std::map<std::string, Channel*>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+        if (it->second) {
+            delete it->second;
+        }
+    }
+    _channels.clear();
 }
 
 char*    Server::getCreationDate( void ) const {
@@ -85,6 +93,29 @@ void    Server::sendWelcomeMessage(Client* client) const {
     sendClientMessage(client->getClientFd(), welcomeMsg2);
     sendClientMessage(client->getClientFd(), welcomeMsg3);
     sendClientMessage(client->getClientFd(), welcomeMsg4);
+}
+
+void    Server::sendWelcomeToChannelMessage(Client* client, Channel* chan) const {
+    std::string topicMsg;
+    if (chan->getTopic().empty()) {
+        topicMsg = GREEN ":ircserv " RPL_NOTOPIC " " + client->getNickname() + " " + chan->getName() + " :No topic is set\r\n" RES;
+    }
+    else {
+        topicMsg = GREEN ":ircserv " RPL_TOPIC " " + chan->getName() + " :" + chan->getTopic() + "\r\n" RES;
+    }
+    sendClientMessage(client->getClientFd(), topicMsg);
+    const std::map<int, Client*>& members = chan->getMembers();
+    std::string namesMsg = GREEN ":ircserv " RPL_NAMREPLY " = " + chan->getName() + " :";
+    for (std::map<int, Client*>::const_iterator it = members.begin(); it != members.end(); ++it) {
+        if (chan->getOperators().find(it->first) != chan->getOperators().end()) {
+            namesMsg += '@';
+        }
+        namesMsg += it->second->getNickname() + ' ';
+    }
+    namesMsg += "\r\n";
+    sendClientMessage(client->getClientFd(), namesMsg);
+    std::string endNamesMsg = GREEN ":ircserv " RPL_ENDOFNAMES " " + chan->getName() + " :End of NAMES list\r\n" RES;
+    sendClientMessage(client->getClientFd(), endNamesMsg);
 }
 
 // // Send a message to client with the code (defined in ServerCodeIRC.hpp)
@@ -150,6 +181,14 @@ void Server::signalHandler( int sig )
 {
 	std::cout << std::endl << "Signal " << sig << " Received!" << std::endl;
 	Server::_signal = true;
+}
+
+void    Server::deleteChannel(const std::string& chan_name) {
+    std::map<std::string, Channel*>::iterator it = this->_channels.find(chan_name);
+    if (it != this->_channels.end()) {
+        delete it->second;
+        this->_channels.erase(it);
+    }
 }
 
 void Server::newClient( void )
