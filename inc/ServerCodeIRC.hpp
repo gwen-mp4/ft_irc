@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerCodeIRC.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 15:56:03 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/01 16:05:10 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/05 11:43:37 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@
 # define ERR_CHANNELISFULL          "471" // <channel> :Cannot join channel (+l)
 # define ERR_NOTOPER                "481" // <nick> :is not an IRC operator
 # define ERR_ERRONEUSNICKNAME       "432" // <client> <nick> :Erroneus nickname 
-# define ERR_ERRONEUSUSERNAME       "467" // <client> <username> :Erroneus username
-# define ERR_ERRONEUSREALNAME       "472" // <client> <realname> :Erroneus realname
+# define ERRONEUSUSERNAME       "467" // <client> <username> :Erroneus username
+# define ERRONEUSREALNAME       "472" // <client> <realname> :Erroneus realname
 # define ERR_ALREADYOPER            "485" // <client> :You're already an IRC operator
 #endif

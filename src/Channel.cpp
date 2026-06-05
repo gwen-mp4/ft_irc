@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:23 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 10:48:43 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/05 11:42:17 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ Channel::~Channel( void )
 // {
 //     return this->_topic;
 // }
+
+std::map<int, Client*>  Channel::getOperators() const {
+    return _operators;
+}
 
 std::map<int, Client*>  Channel::getMembers() const {
     return _members;

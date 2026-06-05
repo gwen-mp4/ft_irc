@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:05 by storck            #+#    #+#             */
-/*   Updated: 2026/06/01 10:44:15 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/05 11:41:46 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class Channel
         // int         getLimit( void ) const;
         // std::string getPassword( void ) const;
         // std::string getTopic( void ) const;
+        std::map<int, Client*>  getOperators() const;
         std::map<int, Client*>  getMembers() const;
 
         // //Setter

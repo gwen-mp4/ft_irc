@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/04 11:46:32 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/05 12:14:57 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ class Server
         void    _handleUser(Client* client, const std::vector<std::string>& params);
         //void    _handleOper(Client* client, const std::vector<std::string>& params);
         //void    _handleMode(Client* client, const std::vector<std::string>& params);
-        //void    _handleQuit(Client* client, const std::vector<std::string>& params);
+        void    _handleQuit(Client* client, const std::vector<std::string>& params);
         void    _handleJoin(Client* client, const std::vector<std::string>& params);
         //void    _handlePart(Client* client, const std::vector<std::string>& params);
         //void    _handleTopic(Client* client, const std::vector<std::string>& params);
-        //void    _handleKick(Client* client, const std::vector<std::string>& params);
+        void    _handleKick(Client* client, const std::vector<std::string>& params);
         void    _handlePrivMsg(Client* client, const std::vector<std::string>& params);
         //void    _handleNotice(Client* client, const std::vector<std::string>& params);
 
