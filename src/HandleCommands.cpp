@@ -194,9 +194,39 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
 
 // }
 
-// void Server::_handleQuit(Client *client, const std::vector<std::string> &params) {
+void Server::_handleQuit(Client *client, const std::vector<std::string> &params) {
+    if (params.size() < 1) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
+        return ;        
+    }
 
-// }
+    std::string chan_name = params.at(0);
+    Channel     *chan;
+
+    try {
+        chan = this->_channels.at(chan_name);
+    }
+    catch(const std::out_of_range& e) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
+        return ;
+    }
+
+    if (!(chan->getMembers()[client->getClientFd()]))
+    {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOTONCHANNEL + client->getNickname() + " " + chan_name + " * :You're not on that channel\r\n" RES);
+        return ;
+    }
+
+    if (chan->getOperators()[client->getClientFd()])
+    {
+        chan->getOperators().erase(client->getClientFd());
+    }
+
+    chan->getMembers().erase(client->getClientFd());
+    client->getJoinedChannels().erase(chan);
+
+    //std::cout << "Kick handler called\n";
+}
 
 void Server::_handleJoin(Client *client, const std::vector<std::string> &params) {
     (void) client;
@@ -212,9 +242,51 @@ void Server::_handleJoin(Client *client, const std::vector<std::string> &params)
 
 // }
 
-// void Server::_handleKick(Client *client, const std::vector<std::string> &params) {
+void Server::_handleKick(Client *client, const std::vector<std::string> &params) {
+    if (params.size() < 2) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
+        return ;        
+    }
 
-// }
+    std::string chan_name = params.at(0);
+    Channel     *chan;
+
+    try {
+        chan = this->_channels.at(chan_name);
+    }
+    catch(const std::out_of_range& e) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
+        return ;
+    }
+
+    if (!(chan->getOperators()[client->getClientFd()]))
+    {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + client->getNickname() + " " + chan_name + " * :You're not channel operator\r\n" RES);
+        return ;
+    }
+
+    std::string victim_name = params.at(1);
+    Client      *victim;
+
+    try {
+        victim = this->_clientsNick[victim_name];
+    }
+    catch(const std::out_of_range& e) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHNICK + victim_name + " * :No such nickname\r\n" RES);
+        return ;
+    }
+
+    if (!(chan->getMembers()[victim->getClientFd()]))
+    {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_USERNOTINCHANNEL + victim->getNickname() + " " + chan_name + " * :They aren't on that channel\r\n" RES);
+        return ;
+    }
+
+    chan->getMembers().erase(victim->getClientFd());
+    victim->getJoinedChannels().erase(chan);
+
+    //std::cout << "Kick handler called\n";
+}
 
 void Server::_handlePrivMsg(Client *client, const std::vector<std::string> &params) {
     (void) client;

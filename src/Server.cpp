@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/04 15:04:21 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/05 12:14:15 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["USER"] = &Server::_handleUser;
     //_cmds["OPER"] = &Server::_handleOper;
     //_cmds["MODE"] = &Server::_handleMode;
-    //_cmds["QUIT"] = &Server::_handleQuit;
+    _cmds["QUIT"] = &Server::_handleQuit;
     _cmds["JOIN"] = &Server::_handleJoin;
     //_cmds["PART"] = &Server::_handlePart;
     //_cmds["TOPIC"] = &Server::_handleTopic;
-    //_cmds["KICK"] = &Server::_handleKick;
+    _cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
     //_cmds["NOTICE"] = &Server::_handleNotice;
 }
@@ -200,6 +200,7 @@ void    Server::clearClient( int fd )
     this->_clients[fd]->setSentNick(false);
     this->_clients[fd]->setSentUser(false);
     this->_clients[fd]->setNickname("");
+    //this->_clients[fd]->setIsOperator(false);
     delete this->_clients[fd];
     this->_clients.erase(fd);
 }
