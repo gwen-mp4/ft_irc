@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/05 12:51:16 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/05 13:34:39 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,7 @@ void    Server::run( void )
 
         for (unsigned int i = 0; i < this->_clientNb; ++i)
         {
-            if (this->_fds[i].revents & POLLIN)
+            if (this->_signal == false && (this->_fds[i].revents & POLLIN))
             {
                 if (this->_fds[i].fd == this->_socket)
                     newClient();
