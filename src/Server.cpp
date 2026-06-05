@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/05 12:14:15 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/05 12:51:16 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,8 +215,8 @@ void    Server::clientInput( int fd )
     {
         std::cerr << RED "Client <" << fd << "> disconnected" << RES << std::endl;
         clearClient(fd);
-        this->_clientNb--;
         close(fd);
+        this->_clientNb--;
     }
     else
     {
@@ -271,10 +271,11 @@ void    Server::run( void )
     std::cout << "ClOSING SERVER." << std::endl;
 
     int nfds = this->_clientNb;
-    for (int i = 0; i < nfds; ++i)
+    for (int i = 0; i < nfds; i++)
     {
         if (this->_fds[i].fd >= 0)
         {
+            delete this->_clients[this->_fds[i].fd];
             close (this->_fds[i].fd);
             this->_clientNb--;
         }
