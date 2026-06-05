@@ -94,7 +94,7 @@ class Server
         template <typename T>
         std::string ft_itoa(T num) const;
         template <typename Container>
-        Container   ft_split(const std::string& str, char delimiter, size_t index) const;
+        Container   ft_split(const std::string& str, char delimiter) const;
 };
 
 # include "Utils.tpp"

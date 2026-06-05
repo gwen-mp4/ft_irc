@@ -33,6 +33,7 @@ class Client
         bool    _hasEnteredPass;
         bool    _hasGivenNick;
         bool    _hasGivenUser;
+        bool    _isAlreadyRegistered;
 
     public:
         Client( void );
@@ -55,6 +56,7 @@ class Client
         bool    hasSentPass() const;
         bool    hasSentUser() const;
         bool    isRegistered() const;
+        bool    isAlreadyRegistered() const;
 
         //Setter
         void    setUsername( const std::string& username );
@@ -67,6 +69,8 @@ class Client
         void    setSentPass(bool status);
         void    setSentNick(bool status);
         void    setSentUser(bool status);
+        void    setIsAlreadyRegistered(bool status);
+        void    setIsOperator(bool status);
 };
 
 class Operator: public Client

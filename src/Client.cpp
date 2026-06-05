@@ -23,7 +23,8 @@ Client::Client( void ) :
     _isOperator(false),
     _hasEnteredPass(false),
     _hasGivenNick(false),
-    _hasGivenUser(false) {}
+    _hasGivenUser(false),
+    _isAlreadyRegistered(false) {}
 
 // Client::Client( const std::string& name, const std::string& nick ) :
 //     _username(name),
@@ -126,6 +127,10 @@ bool    Client::isRegistered() const {
     return _hasGivenNick && _hasEnteredPass && _hasGivenUser;
 }
 
+bool Client::isAlreadyRegistered() const {
+    return _isAlreadyRegistered;
+}
+
 /* ---------- Setter ---------- */
 
 void    Client::setUsername( const std::string& username )
@@ -170,4 +175,12 @@ void Client::setSentNick(bool status) {
 
 void Client::setSentUser(bool status) {
     this->_hasGivenUser = status;
+}
+
+void Client::setIsAlreadyRegistered(bool status) {
+    this->_isAlreadyRegistered = status;
+}
+
+void Client::setIsOperator(bool status) {
+    this->_isOperator = status;
 }

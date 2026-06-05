@@ -6,6 +6,11 @@ void    Server::treatCommand(Client* client, std::string raw_line) {
 
     Command msg; // Parse the raw command into a Command object
 	msg.parseCmd(raw_line);
+
+    if (msg.getCommandUpcase() == "QUIT") {
+        _handleQuit(client, msg.getParams());
+        return ;
+    }
     
     bool    isAuth = (msg.getCommandUpcase() == "PASS" || msg.getCommandUpcase() == "NICK" || msg.getCommandUpcase() == "USER");
 
@@ -83,7 +88,8 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     _clientsNick[nickname] = client;
     
     // If client is already registered and wants to change nickname, inform all clients of the modification
-    if (client->isRegistered()) {
+    // It doens't seems to work, even if the client is registered and in joined channels probably, it doesn't send the message to the other clients, I don't know why
+    if (client->isRegistered() && client->isAlreadyRegistered()) {
         std::set<Channel*> channels = client->getJoinedChannels();
         if (!channels.empty()) {
             std::string msg = BLUE ":" + oldNickname + "NICK :" + nickname + "\r\n" RES;
@@ -98,8 +104,9 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
         client->setSentNick(true);
 
     // If client is now registered, send welcome message
-    if (client->isRegistered()) {
+    if (client->isRegistered() && !client->isAlreadyRegistered()) {
         this->sendWelcomeMessage(client);
+        client->setIsAlreadyRegistered(true);
     }
 }
 
@@ -127,8 +134,9 @@ void Server::_handlePass(Client *client, const std::vector<std::string> &params)
     client->setSentPass(true);
 
     // If client is now registered, send welcome message
-    if (client->isRegistered()) {
+    if (client->isRegistered() && !client->isAlreadyRegistered()) {
         this->sendWelcomeMessage(client);
+        client->setIsAlreadyRegistered(true);
     }
 }
 
@@ -187,8 +195,9 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
     client->setSentUser(true);
 
     // If client is now registered, send welcome message
-    if (client->isRegistered()) {
+    if (client->isRegistered() && !client->isAlreadyRegistered()) {
         this->sendWelcomeMessage(client);
+        client->setIsAlreadyRegistered(true);
     }
 }
 
@@ -203,6 +212,7 @@ void Server::_handleUser(Client *client, const std::vector<std::string> &params)
 void Server::_handleQuit(Client *client, const std::vector<std::string> &params) {
     (void)params;
 
+    // Add IRC quit message with reason if given and broadcast it to all channels the client is in
     this->sendClientMessage(client->getClientFd(), BLUE "Good bye, nice to see you.\r\n" RES);
 
     int fd = client->getClientFd();
@@ -228,7 +238,8 @@ void Server::_handleJoin(Client *client, const std::vector<std::string> &params)
     
     std::string chan_name = params.at(0);
 
-    std::vector<std::string> chan_list = this->ft_split<std::vector<std::string> >(chan_name, ',', 0);
+    std::vector<std::string> chan_list = this->ft_split<std::vector<std::string> >(chan_name, ',');
+
     for (std::vector<std::string>::iterator it = chan_list.begin(); it != chan_list.end(); ++it) {
         std::string name = *it;
         if (name.empty() || (name[0] != '#' && name[0] != '&')) {
@@ -240,6 +251,8 @@ void Server::_handleJoin(Client *client, const std::vector<std::string> &params)
             chan = new Channel(name);
             _channels[name] = chan;
             chan->addOperators(client);
+            if (!client->isOperator())
+                client->setIsOperator(true);
         } else {
             chan = _channels[name];
             if (chan->isAlreadyInChannel(client)) {

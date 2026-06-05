@@ -107,7 +107,7 @@ void    Server::sendWelcomeToChannelMessage(Client* client, Channel* chan) const
     const std::map<int, Client*>& members = chan->getMembers();
     std::string namesMsg = GREEN ":ircserv " RPL_NAMREPLY " = " + chan->getName() + " :";
     for (std::map<int, Client*>::const_iterator it = members.begin(); it != members.end(); ++it) {
-        if (chan->getOperators().find(it->first) != chan->getOperators().end()) {
+        if (it->second->isOperator()) {
             namesMsg += '@';
         }
         namesMsg += it->second->getNickname() + ' ';
@@ -322,7 +322,7 @@ void    Server::run( void )
     std::cout << "ClOSING SERVER." << std::endl;
 
     int nfds = this->_clientNb;
-    for (int i = 0; i < nfds; i++)
+    for (int i = 0; i < nfds; ++i)
     {
         if (this->_fds[i].fd >= 0)
         {

@@ -1,3 +1,7 @@
+# Problems:
+-There are leaks (and probably FDs leaks) when we close the server first before all clients are disconnected
+-NICK's broadcast doesn't work when changing nickname, need to see why
+
 LOG:
 
 *29/05 16:20 by gwen*:
@@ -35,4 +39,4 @@ TODO:   Cleanly destroy a client when it disconnects.
 -Added welcome code
 
 *05/06 12:30 by gwen*:
--Added JOIN command, FINALLY IT WORKS!!! (no leaks and FDs leaks) Need to fix problem with multiple join and isOperator() message
+-Added JOIN command, FINALLY IT WORKS!!! (no leaks and FDs leaks for now)
