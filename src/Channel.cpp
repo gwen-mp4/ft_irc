@@ -126,6 +126,22 @@ std::map<int, Client*>  Channel::getMembers() const {
 //     this->_topic = newTopic;
 // }
 
+void    Channel::addOperators(Client* newOper) {
+    _operators[newOper->getClientFd()] = newOper;
+}
+
+void    Channel::addMembers(Client* newMember) {
+    _members[newMember->getClientFd()] = newMember;
+}
+
+void    Channel::removeOperators(Client* oper) {
+    _operators.erase(oper->getClientFd());
+}
+
+void    Channel::removeMembers(Client* member) {
+    _members.erase(member->getClientFd());
+}
+
 void    Channel::broadcastToChannel(Client* sender, std::string message, Server& server) {
     std::map<int, Client*>::iterator it = _members.begin();
     for (; it != _members.end(); ++it) {

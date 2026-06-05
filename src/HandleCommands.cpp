@@ -229,8 +229,35 @@ void Server::_handleQuit(Client *client, const std::vector<std::string> &params)
 }
 
 void Server::_handleJoin(Client *client, const std::vector<std::string> &params) {
-    (void) client;
-    (void) params;
+
+    if (params.size() < 1) {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NEEDMOREPARAMS " * :Not enough parameters\r\n" RES);
+        return ;        
+    }
+    
+    std::string chan_name = params.at(0);
+    if (chan_name[0] != '#') {
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL + chan_name + " * :No such channel\r\n" RES);
+        return ;
+    }
+
+    std::map<std::string, Channel*>::iterator chanIt = _channels.find(chan_name);
+    Channel *chan;
+    if (chanIt == _channels.end()) {
+        chan = new Channel();
+        _channels[chan_name] = chan;
+        chan->addOperators(client);
+    }
+    else {
+        chan = chanIt->second;
+    }
+
+    chan->addMembers(client);
+    client->getJoinedChannels().insert(chan);
+
+    std::string joinMsg = BLUE ":" + client->getNickname() + " JOIN " + chan_name + "\r\n" RES;
+    chan->broadcastToChannel(client, joinMsg, *this);
+    
     std::cout << "Join handler called\n";
 }
 
