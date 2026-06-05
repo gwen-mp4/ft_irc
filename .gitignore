@@ -3,3 +3,5 @@ obj/
 ircserv
 a.out
 command
+vgcore.*
+*.o

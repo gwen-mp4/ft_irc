@@ -64,6 +64,7 @@ class Server
 
         void    sendClientMessage(int clientFD, std::string message) const;
         void    sendWelcomeMessage(Client* client) const;
+        void    sendWelcomeToChannelMessage(Client* client, Channel* chan) const;
 
         // For now, we don't need it or won't need it for later
         // //Getter:
@@ -86,11 +87,14 @@ class Server
         void    clearClient( int fd );
         void    newClient( void );
         void    clientInput( int fd );
+        void    deleteChannel(const std::string& chan_name);
 
         char*    getCreationDate( void ) const;
         
         template <typename T>
         std::string ft_itoa(T num) const;
+        template <typename Container>
+        Container   ft_split(const std::string& str, char delimiter, size_t index) const;
 };
 
 # include "Utils.tpp"

@@ -12,13 +12,14 @@
 
 #include "../inc/Include.hpp"
 
-Channel::Channel( void ) :
+Channel::Channel(std::string name) :
+    _name(name),
     _inviteOnly(false),
     _topicRestr(false),
     _userLimited(false),
     _limit(0),
-    _password(NULL),
-    _topic(NULL),
+    _password(""),
+    _topic(""),
     _nbOp(0) {}
 
 Channel::Channel( Channel const & other )
@@ -30,6 +31,7 @@ Channel& Channel::operator=( Channel const & other )
 {
     if (this != &other)
     {
+        this->_name = other._name;
         this->_inviteOnly = other._inviteOnly;
         this->_topicRestr = other._topicRestr;
         this->_userLimited = other._userLimited;
@@ -53,37 +55,41 @@ Channel::~Channel( void )
 }
 
 
-// /* ---------- Getter ---------- */
+/* ---------- Getter ---------- */
 
-// bool        Channel::getInviteMode( void ) const
-// {
-//     return this->_inviteOnly;
-// }
+std::string Channel::getName() const {
+    return _name;
+}
 
-// bool        Channel::getTopicRestr( void ) const
-// {
-//     return this->_topicRestr;
-// }
+bool        Channel::getInviteMode( void ) const
+{
+    return this->_inviteOnly;
+}
 
-// bool        Channel::getUserLimited( void ) const
-// {
-//     return this->_userLimited;
-// }
+bool        Channel::getTopicRestr( void ) const
+{
+    return this->_topicRestr;
+}
 
-// int         Channel::getLimit( void ) const
-// {
-//     return this->_limit;
-// }
+bool        Channel::getUserLimited( void ) const
+{
+    return this->_userLimited;
+}
 
-// std::string Channel::getPassword( void ) const
-// {
-//     return this->_password;
-// }
+int         Channel::getLimit( void ) const
+{
+    return this->_limit;
+}
 
-// std::string Channel::getTopic( void ) const
-// {
-//     return this->_topic;
-// }
+std::string Channel::getPassword( void ) const
+{
+    return this->_password;
+}
+
+std::string Channel::getTopic( void ) const
+{
+    return this->_topic;
+}
 
 std::map<int, Client*>  Channel::getOperators() const {
     return _operators;
@@ -94,37 +100,88 @@ std::map<int, Client*>  Channel::getMembers() const {
 }
 
 
-// /* ---------- Setter ---------- */
+/* ---------- Setter ---------- */
 
-// void    Channel::setInviteMode( bool mod )
-// {
-//     this->_inviteOnly = mod;
-// }
+void    Channel::setInviteMode( bool mod )
+{
+    this->_inviteOnly = mod;
+}
 
-// void    Channel::setTopicRestr( bool res )
-// {
-//     this->_topicRestr = res;
-// }
+void    Channel::setTopicRestr( bool res )
+{
+    this->_topicRestr = res;
+}
 
-// void    Channel::setUserLimited( bool lim )
-// {
-//     this->_userLimited = lim;
-// }
+void    Channel::setUserLimited( bool lim )
+{
+    this->_userLimited = lim;
+}
 
-// void    Channel::setLimit( int lim )
-// {
-//     this->_limit = lim;
-// }
+void    Channel::setLimit( int lim )
+{
+    this->_limit = lim;
+}
 
-// void    Channel::setPassword( std::string newPassW )
-// {
-//     this->_password = newPassW;
-// }
+void    Channel::setPassword( std::string newPassW )
+{
+    this->_password = newPassW;
+}
 
-// void    Channel::setTpoic( std::string newTopic )
-// {
-//     this->_topic = newTopic;
-// }
+void    Channel::setTopic( std::string newTopic )
+{
+    this->_topic = newTopic;
+}
+
+void    Channel::setOperatorPrivileges(Client* oper, bool status) {
+    if (status)
+        this->addOperators(oper);
+    else
+        this->removeOperators(oper);
+}
+
+bool    Channel::hasMode(std::string mode) const {
+    if (mode == "i")
+        return _inviteOnly;
+    else if (mode == "t")
+        return _topicRestr;
+    else if (mode == "l")
+        return _userLimited;
+    else if (mode == "k")
+        return !_password.empty();
+    return false;
+}
+
+bool    Channel::isAlreadyInChannel(Client* client) const {
+    return _members.find(client->getClientFd()) != _members.end();
+}
+
+bool    Channel::isInvited(Client* client) const {
+    return _invitedClients.find(client) != _invitedClients.end();
+}
+
+bool Channel::isOperator(Client *client) const {
+    return _operators.find(client->getClientFd()) != _operators.end();
+}
+
+bool Channel::isMember(Client *client) const {
+    return _members.find(client->getClientFd()) != _members.end();
+}
+
+bool Channel::isFull() const {
+    return this->hasMode("l") && static_cast<unsigned int>(_members.size()) >= _limit;
+}
+
+bool Channel::isEmpty() const {
+    return _members.empty();
+}
+
+bool Channel::isPasswordProtected() const {
+    return !_password.empty();
+}
+
+bool Channel::isTopicRestricted() const {
+    return _topicRestr;
+}
 
 void    Channel::addOperators(Client* newOper) {
     _operators[newOper->getClientFd()] = newOper;
@@ -138,10 +195,24 @@ void    Channel::removeOperators(Client* oper) {
     _operators.erase(oper->getClientFd());
 }
 
-void    Channel::removeMembers(Client* member) {
+void    Channel::removeMembers(Client* member, Server& server) {
     _members.erase(member->getClientFd());
+    if (this->isOperator(member))
+        this->removeOperators(member);
+    if (this->isEmpty()) {
+        server.deleteChannel(this->_name);
+    }
 }
 
+void    Channel::inviteClient(Client* client) {
+    _invitedClients.insert(client);
+}
+
+void    Channel::uninviteClient(Client* client) {
+    _invitedClients.erase(client);
+}
+
+//Does not check if sender is member of the channel, it just broadcasts to all members except sender if sender is not NULL
 void    Channel::broadcastToChannel(Client* sender, std::string message, Server& server) {
     std::map<int, Client*>::iterator it = _members.begin();
     for (; it != _members.end(); ++it) {

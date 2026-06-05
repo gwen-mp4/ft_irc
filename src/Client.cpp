@@ -25,18 +25,18 @@ Client::Client( void ) :
     _hasGivenNick(false),
     _hasGivenUser(false) {}
 
-Client::Client( const std::string& name, const std::string& nick ) :
-    _username(name),
-    _nickname(nick),
-    _realname(""),
-    _serverName(""),
-    _hostname(""),
-    _clientIpAddr(""),
-    _clientFd(-1),
-    _isOperator(false),
-    _hasEnteredPass(false),
-    _hasGivenNick(false),
-    _hasGivenUser(false) {}
+// Client::Client( const std::string& name, const std::string& nick ) :
+//     _username(name),
+//     _nickname(nick),
+//     _realname(""),
+//     _serverName(""),
+//     _hostname(""),
+//     _clientIpAddr(""),
+//     _clientFd(-1),
+//     _isOperator(false),
+//     _hasEnteredPass(false),
+//     _hasGivenNick(false),
+//     _hasGivenUser(false) {}
 
 Client::Client( Client const & other )
 {
@@ -104,6 +104,10 @@ int         Client::getClientFd( void ) const
 
 std::set<Channel*>  Client::getJoinedChannels() const {
     return this->_joinedChannels;
+}
+
+bool    Client::isOperator() const {
+    return this->_isOperator;
 }
 
 bool Client::hasSentNick() const {
