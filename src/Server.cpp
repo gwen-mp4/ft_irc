@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/05 13:34:39 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/05 17:54:08 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ Server::Server( const int& port, const std::string& password) :
     //_cmds["MODE"] = &Server::_handleMode;
     _cmds["QUIT"] = &Server::_handleQuit;
     _cmds["JOIN"] = &Server::_handleJoin;
-    //_cmds["PART"] = &Server::_handlePart;
+    _cmds["PART"] = &Server::_handlePart;
     //_cmds["TOPIC"] = &Server::_handleTopic;
     _cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
@@ -179,7 +179,8 @@ void Server::newClient( void )
     cl->setClientIP(inet_ntoa(clientAddr.sin_addr));
     //this->_clients[this->_clients.size()] = &cl;
     this->_clients.insert(std::pair<int, Client*>(inFd, cl));
-    this->_fds[this->_clientNb] = newPoll;
+    //this->_fds[this->_clientNb] = newPoll;
+    this->_fds.push_back(newPoll);
     this->_clientNb++;
 
     std::cout << GREEN "Client <" << inFd << "> connected" << RES << std::endl;
@@ -216,6 +217,10 @@ void    Server::clientInput( int fd )
         std::cerr << RED "Client <" << fd << "> disconnected" << RES << std::endl;
         clearClient(fd);
         close(fd);
+        for (size_t i = 0; i < this->_fds.size(); i++){
+		    if (this->_fds[i].fd == fd)
+			    this->_fds.erase(this->_fds.begin() + i);
+	    }
         this->_clientNb--;
     }
     else
@@ -244,19 +249,26 @@ void    Server::run( void )
 
     reServSock = listen(this->_socket, 32);
 
-    this->_fds[0].fd = this->_socket;
-    this->_fds[0].events = POLLIN;
+    struct pollfd   newCli;
+
+    newCli.fd = this->_socket;
+	newCli.events = POLLIN;
+	newCli.revents = 0;
+	this->_fds.push_back(newCli);
+
+    // this->_fds[0].fd = this->_socket;
+    // this->_fds[0].events = POLLIN;
 
     do {
         signal(SIGINT, Server::signalHandler);
 		signal(SIGQUIT, Server::signalHandler);
         std::cout << "Waiting on poll()..." << std::endl;
-        reServSock = poll(this->_fds, this->_clientNb, -1);
+        reServSock = poll(&_fds[0], _fds.size(), -1);
 
         if (reServSock == 0)
             throw(std::runtime_error("poll() failed"));
 
-        for (unsigned int i = 0; i < this->_clientNb; ++i)
+        for (unsigned int i = 0; i < this->_fds.size(); ++i)
         {
             if (this->_signal == false && (this->_fds[i].revents & POLLIN))
             {
@@ -277,6 +289,7 @@ void    Server::run( void )
         {
             delete this->_clients[this->_fds[i].fd];
             close (this->_fds[i].fd);
+            this->_fds.erase(this->_fds.begin() + i);
             this->_clientNb--;
         }
     }

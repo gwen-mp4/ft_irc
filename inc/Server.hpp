@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:19 by storck            #+#    #+#             */
-/*   Updated: 2026/06/05 13:34:44 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/05 17:27:44 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Server
         int                     _port;
         int                     _socket;
         static bool             _signal;
-        struct pollfd           _fds[200];
+        std::vector<struct pollfd>           _fds;
         unsigned int            _clientNb;
         std::map<int, Client*>    _clients; // Using map for optimization with an int (FD) and pointer to Client
         std::map<std::string, Client*>  _clientsNick; // Searching clients by nickname
@@ -46,7 +46,7 @@ class Server
         //void    _handleMode(Client* client, const std::vector<std::string>& params);
         void    _handleQuit(Client* client, const std::vector<std::string>& params);
         void    _handleJoin(Client* client, const std::vector<std::string>& params);
-        //void    _handlePart(Client* client, const std::vector<std::string>& params);
+        void    _handlePart(Client* client, const std::vector<std::string>& params);
         //void    _handleTopic(Client* client, const std::vector<std::string>& params);
         void    _handleKick(Client* client, const std::vector<std::string>& params);
         void    _handlePrivMsg(Client* client, const std::vector<std::string>& params);
