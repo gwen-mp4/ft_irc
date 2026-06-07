@@ -49,6 +49,9 @@ class Channel
         std::string getTopic( void ) const;
         std::map<int, Client*>  getOperators() const;
         std::map<int, Client*>  getMembers() const;
+        std::map<int, Client*>&  getOperators();
+        std::map<int, Client*>&  getMembers();
+        bool    hasClient(Client* client) const;
 
         //Setter
         void    setInviteMode( bool mod ); // +i or -i

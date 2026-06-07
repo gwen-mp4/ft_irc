@@ -1,7 +1,6 @@
-# Problems:
+# **Problems**:
 -If two servers with the same port connects, only one will work and the other will have leaks
--There are leaks (and probably FDs leaks) when we close the server first before all clients are disconnected
--NICK's broadcast doesn't work when changing nickname, need to see why
+-Client is still in server when QUIT is called, need to SIGINT or SIGQUIT to quit or multiple input to *Ncat: Broken pipe.*
 
 LOG:
 
@@ -41,3 +40,11 @@ TODO:   Cleanly destroy a client when it disconnects.
 
 *05/06 12:30 by gwen*:
 -Added JOIN command, FINALLY IT WORKS!!! (no leaks and FDs leaks for now)
+
+*07/06 15:00 by gwen*:
+-Updated *_handleJoin()*, now it disconnects client if password is invalid
+-Updated *Server::run()*, now it handles correctly signals (SIGINT/SIGQUIT) cleared everything correctly
+-Updated *Server::clearClient()*, it clears everything (FD, client, channels, operator and member)
+-Recoded *_handleQuit()* and *_handlePart*
+-Now **QUIT** and **PART** works perfectly (normally) (and except that QUIT doesn't quit completly the prompt but it does disconnect)
+-Fixed all segfaults, leaks and FDs leaks due to server SIGINT and/or client SIGINT

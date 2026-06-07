@@ -22,6 +22,17 @@ SRC = Channel.cpp \
 	Server.cpp \
 	Command.cpp \
 	HandleCommands.cpp \
+	Commands/Join.cpp \
+	Commands/Mode.cpp \
+	Commands/Nick.cpp \
+	Commands/Notice.cpp \
+	Commands/Oper.cpp \
+	Commands/Part.cpp \
+	Commands/Pass.cpp \
+	Commands/PrivMsg.cpp \
+	Commands/Quit.cpp \
+	Commands/Topic.cpp \
+	Commands/User.cpp \
 	main.cpp
 
 SRCS = $(addprefix $(SRC_DIR), $(SRC))

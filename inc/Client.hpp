@@ -50,7 +50,7 @@ class Client
         std::string getServerName() const;
         std::string getclientIP( void ) const;
         int getClientFd( void ) const;
-        std::set<Channel*>  getJoinedChannels() const;
+        const std::set<Channel*>&  getJoinedChannels() const;
         bool    isOperator() const;
         bool    hasSentNick() const;
         bool    hasSentPass() const;
@@ -71,14 +71,9 @@ class Client
         void    setSentUser(bool status);
         void    setIsAlreadyRegistered(bool status);
         void    setIsOperator(bool status);
-};
 
-class Operator: public Client
-{
-    private:
-
-    public:
-    
+        void    addChannel(Channel* channel);
+        void    removeChannel(Channel* channel);
 };
 
 #endif

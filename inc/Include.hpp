@@ -51,7 +51,10 @@
 # define GREEN "\033[32m"
 # define YELLOW "\033[33m"
 # define BLUE "\033[34m"
+# define BRED "\e[1;31m"
 # define BGRN "\e[1;32m"
+# define BYEL "\e[1;33m"
+# define BBLU "\e[1;34m"
 # define RES "\033[0m"
 
 #endif

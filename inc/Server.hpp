@@ -42,15 +42,15 @@ class Server
         void    _handleNick(Client* client, const std::vector<std::string>& params);
         void    _handlePass(Client* client, const std::vector<std::string>& params);
         void    _handleUser(Client* client, const std::vector<std::string>& params);
-        //void    _handleOper(Client* client, const std::vector<std::string>& params);
-        //void    _handleMode(Client* client, const std::vector<std::string>& params);
+        void    _handleOper(Client* client, const std::vector<std::string>& params);
+        void    _handleMode(Client* client, const std::vector<std::string>& params);
         void    _handleQuit(Client* client, const std::vector<std::string>& params);
         void    _handleJoin(Client* client, const std::vector<std::string>& params);
         void    _handlePart(Client* client, const std::vector<std::string>& params);
-        //void    _handleTopic(Client* client, const std::vector<std::string>& params);
-        void    _handleKick(Client* client, const std::vector<std::string>& params);
+        void    _handleTopic(Client* client, const std::vector<std::string>& params);
+        //void    _handleKick(Client* client, const std::vector<std::string>& params);
         void    _handlePrivMsg(Client* client, const std::vector<std::string>& params);
-        //void    _handleNotice(Client* client, const std::vector<std::string>& params);
+        void    _handleNotice(Client* client, const std::vector<std::string>& params);
 
     public:
         Server( const int& port, const std::string& password);
@@ -84,7 +84,7 @@ class Server
 
         static void    signalHandler( int sig );
         void    clearBuff( void );
-        void    clearClient( int fd );
+        void    clearClient( int fd, std::string reason );
         void    newClient( void );
         void    clientInput( int fd );
         void    deleteChannel(const std::string& chan_name);

@@ -23,15 +23,15 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["NICK"] = &Server::_handleNick;
     _cmds["PASS"] = &Server::_handlePass;
     _cmds["USER"] = &Server::_handleUser;
-    //_cmds["OPER"] = &Server::_handleOper;
-    //_cmds["MODE"] = &Server::_handleMode;
+    _cmds["OPER"] = &Server::_handleOper;
+    _cmds["MODE"] = &Server::_handleMode;
     _cmds["QUIT"] = &Server::_handleQuit;
     _cmds["JOIN"] = &Server::_handleJoin;
     _cmds["PART"] = &Server::_handlePart;
-    //_cmds["TOPIC"] = &Server::_handleTopic;
-    _cmds["KICK"] = &Server::_handleKick;
+    _cmds["TOPIC"] = &Server::_handleTopic;
+    //_cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
-    //_cmds["NOTICE"] = &Server::_handleNotice;
+    _cmds["NOTICE"] = &Server::_handleNotice;
 }
 
 Server::Server( Server const & other )
@@ -177,6 +177,7 @@ void    Server::sendClientMessage(int clientFD, std::string message) const
 // }
 
 bool Server::_signal = false;
+
 void Server::signalHandler( int sig )
 {
 	std::cout << std::endl << "Signal " << sig << " Received!" << std::endl;
@@ -233,16 +234,57 @@ void    Server::clearBuff( void )
     }
 }
 
-void    Server::clearClient( int fd )
+void    Server::clearClient( int fd, std::string reason )
 {
-    this->_clientsNick.erase(this->_clients[fd]->getNickname());
-    this->_clients[fd]->setSentPass(false);
-    this->_clients[fd]->setSentNick(false);
-    this->_clients[fd]->setSentUser(false);
-    this->_clients[fd]->setNickname("");
-    //this->_clients[fd]->setIsOperator(false);
-    delete this->_clients[fd];
-    this->_clients.erase(fd);
+    std::map<int, Client*>::iterator cit = this->_clients.find(fd);
+    if (cit == this->_clients.end())
+        return;
+    Client *client = cit->second;
+
+    // Build quit message
+    std::string quitMsg;
+    if (!reason.empty()) {
+        quitMsg = BYEL ":" + client->getNickname() + " QUIT :" + reason + "\r\n" RES;
+    } else {
+        quitMsg = BYEL ":" + client->getNickname() + " QUIT :Client quit\r\n" RES;
+    }
+
+    // Remove client from all joined channels and notify them
+    std::set<Channel*> channels = client->getJoinedChannels();
+    for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
+        Channel *chan = *it;
+        chan->broadcastToChannel(client, quitMsg, *this);
+        // Erase by fd from channel maps
+        std::map<int, Client*>& members = chan->getMembers();
+        std::map<int, Client*>& ops = chan->getOperators();
+        members.erase(fd);
+        ops.erase(fd);
+        // If channel empty, delete it from server
+        if (members.empty()) {
+            std::map<std::string, Channel*>::iterator chit = this->_channels.find(chan->getName());
+            if (chit != this->_channels.end()) {
+                delete chit->second;
+                this->_channels.erase(chit);
+            }
+        }
+    }
+
+    // Remove from nickname map if present
+    if (!client->getNickname().empty())
+        this->_clientsNick.erase(client->getNickname());
+
+    // delete client and erase from map
+    delete client;
+    this->_clients.erase(cit);
+    close(fd);
+    for (size_t i = 0; i < this->_fds.size(); i++){
+        if (this->_fds[i].fd == fd) {
+            this->_fds.erase(this->_fds.begin() + i);
+            break;
+        }
+    }
+    if (this->_clientNb > 0)
+        this->_clientNb--;
 }
 
 void    Server::clientInput( int fd )
@@ -251,24 +293,13 @@ void    Server::clientInput( int fd )
 
     ssize_t bytes = recv(fd, this->_buffer, sizeof(this->_buffer) - 1, 0);
 
-    if (bytes <= 0)
-    {
+    if (bytes <= 0) {
         std::cerr << RED "Client <" << fd << "> disconnected" << RES << std::endl;
-        clearClient(fd);
-        close(fd);
-        for (size_t i = 0; i < this->_fds.size(); i++){
-		    if (this->_fds[i].fd == fd)
-			    this->_fds.erase(this->_fds.begin() + i);
-	    }
-        this->_clientNb--;
-    }
-    else
-    {
-
+        clearClient(fd, "");
+    } else {
         this->_buffer[bytes] = '\0';
         std::cout << GREEN "Client <" << fd << "> input: " << this->_buffer << RES;
         treatCommand(this->_clients[fd], this->_buffer);
-        //sendClientMessage(fd, this->_buffer);
     }
 }
 
@@ -304,8 +335,11 @@ void    Server::run( void )
         std::cout << "Waiting on poll()..." << std::endl;
         reServSock = poll(&_fds[0], _fds.size(), -1);
 
-        if (reServSock == 0)
+        if (reServSock == -1) {
+            if (Server::_signal)
+                break;
             throw(std::runtime_error("poll() failed"));
+        }
 
         for (unsigned int i = 0; i < this->_fds.size(); ++i)
         {
@@ -319,22 +353,26 @@ void    Server::run( void )
         }
     } while (this->_signal == false);
 
-    std::cout << "ClOSING SERVER." << std::endl;
+    std::cout << "CLOSING SERVER." << std::endl;
 
-    int nfds = this->_clientNb;
-    for (int i = 0; i < nfds; ++i)
+    // Close all client connections cleanly
+    for (size_t i = 0; i < this->_fds.size(); )
     {
-        if (this->_fds[i].fd >= 0)
-        {
-            delete this->_clients[this->_fds[i].fd];
-            close (this->_fds[i].fd);
-            this->_fds.erase(this->_fds.begin() + i);
-            this->_clientNb--;
+        int fd = this->_fds[i].fd;
+        if (fd == this->_socket) {
+            ++i;
+            continue;
         }
+        // clearClient will remove client from maps and delete client
+        this->clearClient(fd, "Server shutting down");
+        // do not increment i because we erased current element
     }
-    if (reServSock != -1)
+    if (this->_socket >= 0)
     {
-        std::cout << "ClOSING SERVER." << std::endl;
-        close(reServSock);
+        std::cout << "CLOSING SERVER SOCKET." << std::endl;
+        close(this->_socket);
+        this->_socket = -1;
     }
+    this->_fds.clear();
+    this->_clientNb = 0;
 }

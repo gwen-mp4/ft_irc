@@ -103,7 +103,7 @@ int         Client::getClientFd( void ) const
     return this->_clientFd;
 }
 
-std::set<Channel*>  Client::getJoinedChannels() const {
+const std::set<Channel*>&  Client::getJoinedChannels() const {
     return this->_joinedChannels;
 }
 
@@ -183,4 +183,12 @@ void Client::setIsAlreadyRegistered(bool status) {
 
 void Client::setIsOperator(bool status) {
     this->_isOperator = status;
+}
+
+void    Client::addChannel(Channel* channel) {
+    this->_joinedChannels.insert(channel);
+}
+
+void    Client::removeChannel(Channel* channel) {
+    this->_joinedChannels.erase(channel);
 }

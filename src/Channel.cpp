@@ -99,6 +99,20 @@ std::map<int, Client*>  Channel::getMembers() const {
     return _members;
 }
 
+std::map<int, Client*>&  Channel::getOperators() {
+    return _operators;
+}
+
+std::map<int, Client*>&  Channel::getMembers() {
+    return _members;
+}
+
+bool    Channel::hasClient(Client* client) const {
+    if (!client)
+        return false;
+    std::map<int, Client*>::const_iterator    it = _members.find(client->getClientFd());
+    return (it != _members.end());
+}
 
 /* ---------- Setter ---------- */
 
