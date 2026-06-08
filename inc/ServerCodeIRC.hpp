@@ -98,7 +98,7 @@
 # define ERR_NOTONCHANNEL           "442" // <client> <channel> :You're not on that channel
 # define ERR_ALREADYONCHANNEL       "443" // <channel> :You're already on that channel
 # define ERR_NOTREGISTERED          "451" // :You have registered
-# define ERR_NEEDMOREPARAMS         "461" // :enough parameters
+# define ERR_NEEDMOREPARAMS         "461" // :Not enough parameters
 # define ERR_ALREADYREGISTRED       "462" // :You may not reregister
 # define ERR_PASSWDMISMATCH         "464" // :Password incorrect
 # define ERR_UNKNOWNMODE            "472" // :Unknown mode char

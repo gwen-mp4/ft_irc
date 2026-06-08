@@ -51,8 +51,8 @@ class Server
         void    _handleKick(Client* client, const std::vector<std::string>& params);
         void    _handlePrivMsg(Client* client, const std::vector<std::string>& params);
         void    _handleNotice(Client* client, const std::vector<std::string>& params);
-        void    _handleNames(Client* client, const std::vector<std::string>& params);
-        void    _handleList(Client* client, const std::vector<std::string>& params);
+        //void    _handleNames(Client* client, const std::vector<std::string>& params);
+        //void    _handleList(Client* client, const std::vector<std::string>& params);
 
         // Setting copy constructor in private so we can't instanciate it
         Server( Server const & other );

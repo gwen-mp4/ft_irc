@@ -26,8 +26,7 @@ Client::Client( void ) :
     _hasGivenUser(false),
     _isAlreadyRegistered(false) {}
 
-Client::Client( Client const & other )
-{
+Client::Client( Client const & other ) {
     *this = other;
 }
 

@@ -32,8 +32,8 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
     _cmds["NOTICE"] = &Server::_handleNotice;
-    _cmds["NAMES"] = &Server::_handleNames;
-    _cmds["LIST"] = &Server::_handleList;
+    //_cmds["NAMES"] = &Server::_handleNames;
+    //_cmds["LIST"] = &Server::_handleList;
 }
 
 Server::~Server( void )
@@ -69,7 +69,7 @@ void    Server::sendWelcomeMessage(Client* client) const {
     std::string welcomeMsg3 = GREEN ":ircserv " RPL_CREATED " :This server was created on "
         + std::string(this->_creationTime) + "\r\n" RES;
     std::string welcomeMsg4 = GREEN ":ircserv " RPL_MYINFO " " + client->getServerName() + " " + ft_itoa(this->_version)
-        + " iow tkoli\r\n" RES;
+        + " iow tlkoi\r\n" RES;
     sendClientMessage(client->getClientFd(), welcomeMsg);
     sendClientMessage(client->getClientFd(), welcomeMsg2);
     sendClientMessage(client->getClientFd(), welcomeMsg3);
@@ -86,14 +86,14 @@ void    Server::sendWelcomeToChannelMessage(Client* client, Channel* chan) const
     }
     sendClientMessage(client->getClientFd(), topicMsg);
     const std::map<int, Client*>& members = chan->getMembers();
-    std::string namesMsg = GREEN ":ircserv " RPL_NAMREPLY " = " + chan->getName() + " :";
+    std::string namesMsg = GREEN ":ircserv " RPL_NAMREPLY " = " + chan->getName() + " :" RES + BGRN;
     for (std::map<int, Client*>::const_iterator it = members.begin(); it != members.end(); ++it) {
-        if (it->second->isOperator()) {
+        if (chan->isOperator(it->second)) {
             namesMsg += '@';
         }
         namesMsg += it->second->getNickname() + ' ';
     }
-    namesMsg += "\r\n";
+    namesMsg += "\r\n" RES;
     sendClientMessage(client->getClientFd(), namesMsg);
     std::string endNamesMsg = GREEN ":ircserv " RPL_ENDOFNAMES " " + chan->getName() + " :End of NAMES list\r\n" RES;
     sendClientMessage(client->getClientFd(), endNamesMsg);

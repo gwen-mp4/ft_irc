@@ -16,7 +16,6 @@ Channel::Channel(std::string name) :
     _name(name),
     _inviteOnly(false),
     _topicRestr(false),
-    _userLimited(false),
     _limit(0),
     _password(""),
     _topic(""),
@@ -34,7 +33,6 @@ Channel& Channel::operator=( Channel const & other )
         this->_name = other._name;
         this->_inviteOnly = other._inviteOnly;
         this->_topicRestr = other._topicRestr;
-        this->_userLimited = other._userLimited;
         this->_limit = other._limit;
         this->_password = other._password;
         this->_topic = other._topic;
@@ -43,14 +41,7 @@ Channel& Channel::operator=( Channel const & other )
     return (*this);
 }
 
-Channel::~Channel( void )
-{
-    // Don't need to delete because a container frees itself when destructor is called
-    // for (unsigned int i = 0; i < this->_nbOp; ++i)
-    // {
-    //     delete this->_operators[i];
-    // }
-}
+Channel::~Channel( void ) {}
 
 
 /* ---------- Getter ---------- */
@@ -67,15 +58,6 @@ bool        Channel::getInviteMode( void ) const
 bool        Channel::getTopicRestr( void ) const
 {
     return this->_topicRestr;
-}
-
-bool        Channel::getUserLimited( void ) const
-{
-    return this->_userLimited;
-}
-
-bool        Channel::getIsInvisible() const {
-    return this->_isInvisible;
 }
 
 int         Channel::getLimit( void ) const
@@ -128,19 +110,16 @@ void    Channel::setTopicRestr( bool res )
     this->_topicRestr = res;
 }
 
-void    Channel::setUserLimited( bool lim )
-{
-    this->_userLimited = lim;
-}
-
-void    Channel::setLimit( int lim )
+void    Channel::setLimit( unsigned int lim )
 {
     this->_limit = lim;
+    setMode('l');
 }
 
 void    Channel::setPassword( std::string newPassW )
 {
     this->_password = newPassW;
+    setMode('k');
 }
 
 void    Channel::setTopic( std::string newTopic )
@@ -155,18 +134,27 @@ void    Channel::setOperatorPrivileges(Client* oper, bool status) {
         this->removeOperators(oper);
 }
 
+void    Channel::setMode(char mode) {
+    _modes.insert(mode);
+}
+
+void    Channel::unsetLimit() {
+    _limit = 0;
+    unsetMode('l');
+}
+
+void    Channel::unsetPassword() {
+    _password.clear();
+    unsetMode('k');
+}
+
+void    Channel::unsetMode(char mode)  {
+    _modes.erase(mode);
+}
+
+
 bool    Channel::hasMode(char mode) const {
-    if (mode == 'i')
-        return _inviteOnly;
-    else if (mode == 'p')
-        return _isInvisible;
-    else if (mode == 't')
-        return _topicRestr;
-    else if (mode == 'l')
-        return _userLimited;
-    else if (mode == 'k')
-        return !_password.empty();
-    return false;
+    return _modes.find(mode) != _modes.end();
 }
 
 bool    Channel::isAlreadyInChannel(Client* client) const {
