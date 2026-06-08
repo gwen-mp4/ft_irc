@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/05 17:54:08 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/08 10:25:10 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,12 @@ void    Server::run( void )
     serverAddress.sin_port = htons(this->_port);
     serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-    bind(this->_socket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
+    if (bind(this->_socket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
+    {
+        std::cout << RED << "Port is already in use." << RES << std::endl;
+        close(this->_socket);
+        return ;
+    }
 
     reServSock = listen(this->_socket, 32);
 
