@@ -9,12 +9,14 @@ void Server::_handleNotice(Client *client, const std::vector<std::string> &param
 
     std::string target = params.at(0);
 
-    std::string msg = BLUE "Notice from " + client->getNickname() + ": ";
-    for (long unsigned int i = 1; i < params.size(); i++)
+    std::string msg = BBLU "Notice from " + client->getNickname() + ": ";
+    for (size_t i = 1; i < params.size(); ++i)
     {
-        msg = msg + " " + params.at(i);
+        msg += params.at(i);
+        if (i + 1 < params.size())
+            msg += " ";
     }
-    msg = msg + RES + "\r\n";
+    msg += RES "\r\n";
 
     if (this->_channels.count(target) > 0)
     {

@@ -55,6 +55,7 @@
 # define BGRN "\e[1;32m"
 # define BYEL "\e[1;33m"
 # define BBLU "\e[1;34m"
+# define BLUB "\e[44m"
 # define RES "\033[0m"
 
 #endif

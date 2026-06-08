@@ -10,9 +10,11 @@ void Server::_handlePrivMsg(Client *client, const std::vector<std::string> &para
     std::string target = params.at(0);
 
     std::string msg = client->getNickname() + " says: ";
-    for (long unsigned int i = 1; i < params.size(); i++)
+    for (size_t i = 1; i < params.size(); ++i)
     {
-        msg = msg + " " + params.at(i);
+        msg += params.at(i);
+        if (i + 1 < params.size())
+            msg += " ";
     }
     msg = msg + "\r\n";
 

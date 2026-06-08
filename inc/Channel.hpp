@@ -22,8 +22,6 @@ class Channel
 {
     private:
         std::string             _name;
-        bool                    _inviteOnly;
-        bool                    _topicRestr;
         unsigned int            _limit; // +l
         std::string             _password; // +k
         std::string             _topic; // +t
@@ -41,10 +39,6 @@ class Channel
 
         //Getter:
         std::string getName() const;
-        bool        getInviteMode( void ) const;
-        bool        getTopicRestr( void ) const;
-        bool        getUserLimited( void ) const;
-        bool        getIsInvisible() const;
         int         getLimit( void ) const;
         std::string getPassword( void ) const;
         std::string getTopic( void ) const;

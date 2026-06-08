@@ -14,12 +14,13 @@
 
 Channel::Channel(std::string name) :
     _name(name),
-    _inviteOnly(false),
-    _topicRestr(false),
     _limit(0),
     _password(""),
     _topic(""),
-    _nbOp(0) {}
+    _nbOp(0) {
+        
+    setMode('t');
+}
 
 Channel::Channel( Channel const & other )
 {
@@ -31,8 +32,6 @@ Channel& Channel::operator=( Channel const & other )
     if (this != &other)
     {
         this->_name = other._name;
-        this->_inviteOnly = other._inviteOnly;
-        this->_topicRestr = other._topicRestr;
         this->_limit = other._limit;
         this->_password = other._password;
         this->_topic = other._topic;
@@ -48,16 +47,6 @@ Channel::~Channel( void ) {}
 
 std::string Channel::getName() const {
     return _name;
-}
-
-bool        Channel::getInviteMode( void ) const
-{
-    return this->_inviteOnly;
-}
-
-bool        Channel::getTopicRestr( void ) const
-{
-    return this->_topicRestr;
 }
 
 int         Channel::getLimit( void ) const
@@ -99,16 +88,6 @@ bool    Channel::hasClient(Client* client) const {
 }
 
 /* ---------- Setter ---------- */
-
-void    Channel::setInviteMode( bool mod )
-{
-    this->_inviteOnly = mod;
-}
-
-void    Channel::setTopicRestr( bool res )
-{
-    this->_topicRestr = res;
-}
 
 void    Channel::setLimit( unsigned int lim )
 {
@@ -183,10 +162,6 @@ bool Channel::isEmpty() const {
 
 bool Channel::isPasswordProtected() const {
     return !_password.empty();
-}
-
-bool Channel::isTopicRestricted() const {
-    return _topicRestr;
 }
 
 void    Channel::addOperators(Client* newOper) {

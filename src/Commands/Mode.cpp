@@ -125,5 +125,5 @@ void Server::_handleMode(Client *client, const std::vector<std::string> &params)
         channel->broadcastToChannel(client, modeChangeMsg, *this);
     }
 
-    std::cout << "Mode handler called\n";
+    //std::cout << "Mode handler called\n";
 }

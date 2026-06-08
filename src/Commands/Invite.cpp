@@ -22,7 +22,8 @@ void Server::_handleInvite(Client *client, const std::vector<std::string> &param
 
     if (this->_channels.count(chan_name) == 0)
     {
-        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL " " + chan_name + " * :No such channel\r\n" RES);
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHCHANNEL " " + chan_name
+            + " * :No such channel\r\n" RES);
         return ;
     }
     else
@@ -30,17 +31,14 @@ void Server::_handleInvite(Client *client, const std::vector<std::string> &param
 
     if (chan->getMembers().count(target->getClientFd()) != 0)
     {
-        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_USERONCHANNEL " " + target_nick + " " + chan_name + " * :is already on taht channel \r\n" RES);
+        this->sendClientMessage(client->getClientFd(), YELLOW ":ircserv " ERR_USERONCHANNEL " "
+            + target_nick + " " + chan_name + " * :is already on channel \r\n" RES);
         return ;
     }
     
-    if (chan->getInviteMode() == false)
-    {
-        this->sendClientMessage(client->getClientFd(), RED ":ircserv " + chan_name + " * :Is not in Invite mode.\r\n" RES);
-        return ;
-    }
-
     chan->inviteClient(target);
-    this->sendClientMessage(target->getClientFd(), ":ircserv " + client->getNickname() + " invited you to channel " + chan_name + "\r\n");
-    return ;
+    this->sendClientMessage(target->getClientFd(), BLUE ":" + client->getNickname() + " INVITE "
+        + target_nick + " :" + chan_name + "\r\n" RES);
+    this->sendClientMessage(client->getClientFd(), BLUE ":ircserv " RPL_INVITING " "
+        + client->getNickname() + " " + target_nick + " :" + chan_name + "\r\n" RES);
 }

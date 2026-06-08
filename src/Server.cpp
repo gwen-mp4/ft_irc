@@ -32,8 +32,8 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
     _cmds["NOTICE"] = &Server::_handleNotice;
-    //_cmds["NAMES"] = &Server::_handleNames;
-    //_cmds["LIST"] = &Server::_handleList;
+    _cmds["NAMES"] = &Server::_handleNames;
+    _cmds["LIST"] = &Server::_handleList;
 }
 
 Server::~Server( void )
@@ -105,57 +105,6 @@ void    Server::sendClientMessage(int clientFD, std::string message) const
     if (send(clientFD, message.c_str(), message.size(), 0) == -1)
         std::cerr << "send() failed." << std::endl;
 }
-
-
-// /* ---------- Getter ---------- */
-
-// int Server::getport(void) const
-// {
-//     return this->_port;
-// }
-
-// int Server::getSocket(void) const
-// {
-//     return this->_socket;
-// }
-
-// bool Server::getSignal(void) const
-// {
-//     return this->_signal;
-// }
-
-// Client *Server::getClient(int index) const
-// {
-//     return this->_clients[index];
-// }
-
-// std::string Server::getServPassword( void ) const
-// {
-//     return this->_servPassword;
-// }
-
-
-// /* ---------- Setter ---------- */
-
-// void    Server::setport( int por )
-// {
-//     this->_port = por;
-// }
-
-// void    Server::setSocket( int soc )
-// {
-//     this->_socket = soc;
-// }
-
-// void    Server::setSignal( bool sig )
-// {
-//     this->_signal = sig;
-// }
-
-// void    Server::setServPassword( std::string pswd )
-// {
-//     this->_servPassword = pswd;
-// }
 
 bool Server::_signal = false;
 
@@ -258,7 +207,7 @@ void    Server::clearClient( int fd, std::string reason )
     delete client;
     this->_clients.erase(cit);
     close(fd);
-    for (size_t i = 0; i < this->_fds.size(); i++){
+    for (size_t i = 0; i < this->_fds.size(); ++i){
         if (this->_fds[i].fd == fd) {
             this->_fds.erase(this->_fds.begin() + i);
             break;

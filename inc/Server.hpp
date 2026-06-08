@@ -51,8 +51,8 @@ class Server
         void    _handleKick(Client* client, const std::vector<std::string>& params);
         void    _handlePrivMsg(Client* client, const std::vector<std::string>& params);
         void    _handleNotice(Client* client, const std::vector<std::string>& params);
-        //void    _handleNames(Client* client, const std::vector<std::string>& params);
-        //void    _handleList(Client* client, const std::vector<std::string>& params);
+        void    _handleNames(Client* client, const std::vector<std::string>& params);
+        void    _handleList(Client* client, const std::vector<std::string>& params);
 
         // Setting copy constructor in private so we can't instanciate it
         Server( Server const & other );
@@ -69,20 +69,6 @@ class Server
         void    sendClientMessage(int clientFD, std::string message) const;
         void    sendWelcomeMessage(Client* client) const;
         void    sendWelcomeToChannelMessage(Client* client, Channel* chan) const;
-
-        // For now, we don't need it or won't need it for later
-        // //Getter:
-        // int         getport( void ) const;
-        // int         getSocket( void ) const;
-        // bool        getSignal( void ) const;
-        // Client*     getClient( int index ) const;
-        // std::string getServPassword( void ) const;
-
-        // //Setter
-        // void    setport( int por );
-        // void    setSocket( int soc );
-        // void    setSignal( bool sig );
-        // void    setServPassword( std::string );
 
         void    run( void );
 
