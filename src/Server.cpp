@@ -23,7 +23,7 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["NICK"] = &Server::_handleNick;
     _cmds["PASS"] = &Server::_handlePass;
     _cmds["USER"] = &Server::_handleUser;
-    _cmds["OPER"] = &Server::_handleOper;
+    _cmds["INVITE"] = &Server::_handleInvite;
     _cmds["MODE"] = &Server::_handleMode;
     _cmds["QUIT"] = &Server::_handleQuit;
     _cmds["JOIN"] = &Server::_handleJoin;
@@ -32,6 +32,8 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
     _cmds["NOTICE"] = &Server::_handleNotice;
+    _cmds["NAMES"] = &Server::_handleNames;
+    _cmds["LIST"] = &Server::_handleList;
 }
 
 Server::~Server( void )

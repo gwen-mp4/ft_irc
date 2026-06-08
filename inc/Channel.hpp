@@ -24,10 +24,11 @@ class Channel
         std::string             _name;
         bool                    _inviteOnly;
         bool                    _topicRestr;
-        bool                    _userLimited;
-        unsigned int            _limit;
-        std::string             _password;
-        std::string             _topic;
+        bool                    _userLimited; // Does is it have users limit?
+        bool                    _isInvisible; // +p
+        unsigned int            _limit; // +l
+        std::string             _password; // +k
+        std::string             _topic; // +t
         unsigned int            _nbOp;
         std::map<int, Client*>  _operators; // Using map for optimization with an int (FD) and pointer to Client
         std::map<int, Client*>  _members; // Members of a channel using their FD
@@ -44,6 +45,7 @@ class Channel
         bool        getInviteMode( void ) const;
         bool        getTopicRestr( void ) const;
         bool        getUserLimited( void ) const;
+        bool        getIsInvisible() const;
         int         getLimit( void ) const;
         std::string getPassword( void ) const;
         std::string getTopic( void ) const;
@@ -62,7 +64,7 @@ class Channel
         void    setTopic( std::string newTopic ); // TOPIC command
         void    setOperatorPrivileges(Client* oper, bool status); // +o or -o
 
-        bool    hasMode(std::string mode) const;
+        bool    hasMode(char mode) const;
         bool    isAlreadyInChannel(Client* client) const;
         bool    isInvited(Client* client) const;
         bool    isOperator(Client* client) const;

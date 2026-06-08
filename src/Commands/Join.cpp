@@ -31,11 +31,11 @@ void Server::_handleJoin(Client *client, const std::vector<std::string> &params)
                     + name + " * :You're already on that channel\r\n" RES);
                 continue;
             }
-            if (chan->hasMode("i") && !chan->isInvited(client)) {
+            if (chan->hasMode('i') && !chan->isInvited(client)) {
                 this->sendClientMessage(client->getClientFd(), std::string(RED ":ircserv " ERR_INVITEONLYCHAN) + name + " * :Cannot join channel (+i)\r\n" RES);
                 continue;
             }
-            if (chan->hasMode("k") && !chan->isPasswordProtected()) {
+            if (chan->hasMode('k') && !chan->isPasswordProtected()) {
                 this->sendClientMessage(client->getClientFd(), std::string(RED ":ircserv " ERR_BADCHANNELKEY) + name + " * :Cannot join channel (+k)\r\n" RES);
                 continue;
             }

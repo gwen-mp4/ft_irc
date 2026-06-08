@@ -74,6 +74,10 @@ bool        Channel::getUserLimited( void ) const
     return this->_userLimited;
 }
 
+bool        Channel::getIsInvisible() const {
+    return this->_isInvisible;
+}
+
 int         Channel::getLimit( void ) const
 {
     return this->_limit;
@@ -151,14 +155,16 @@ void    Channel::setOperatorPrivileges(Client* oper, bool status) {
         this->removeOperators(oper);
 }
 
-bool    Channel::hasMode(std::string mode) const {
-    if (mode == "i")
+bool    Channel::hasMode(char mode) const {
+    if (mode == 'i')
         return _inviteOnly;
-    else if (mode == "t")
+    else if (mode == 'p')
+        return _isInvisible;
+    else if (mode == 't')
         return _topicRestr;
-    else if (mode == "l")
+    else if (mode == 'l')
         return _userLimited;
-    else if (mode == "k")
+    else if (mode == 'k')
         return !_password.empty();
     return false;
 }
@@ -180,7 +186,7 @@ bool Channel::isMember(Client *client) const {
 }
 
 bool Channel::isFull() const {
-    return this->hasMode("l") && static_cast<unsigned int>(_members.size()) >= _limit;
+    return this->hasMode('l') && static_cast<unsigned int>(_members.size()) >= _limit;
 }
 
 bool Channel::isEmpty() const {
