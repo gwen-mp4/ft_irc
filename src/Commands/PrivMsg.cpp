@@ -9,12 +9,12 @@ void Server::_handlePrivMsg(Client *client, const std::vector<std::string> &para
 
     std::string target = params.at(0);
 
-    std::string msg = BLUE + client->getNickname() + " says: ";
+    std::string msg = client->getNickname() + " says: ";
     for (long unsigned int i = 1; i < params.size(); i++)
     {
         msg = msg + " " + params.at(i);
     }
-    msg = msg + RES + "\r\n";
+    msg = msg + "\r\n";
 
     if (this->_channels.count(target) > 0)
     {
