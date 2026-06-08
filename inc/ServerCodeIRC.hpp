@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/01 15:56:03 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/05 11:43:37 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/08 12:03:09 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@
 # define ERR_NICKNAMEINUSE          "433" // <nick> :Nickname is already in use
 # define ERR_NOTONCHANNEL           "442" // <client> <channel> :You're not on that channel
 # define ERR_ALREADYONCHANNEL       "443" // <channel> :You're already on that channel
-# define ERR_NOTREGISTERED          "451" // :You have not registered
-# define ERR_NEEDMOREPARAMS         "461" // :Not enough parameters
+# define ERR_NOTREGISTERED          "451" // :You have registered
+# define ERR_NEEDMOREPARAMS         "461" // :enough parameters
 # define ERR_ALREADYREGISTRED       "462" // :You may not reregister
 # define ERR_PASSWDMISMATCH         "464" // :Password incorrect
 # define ERR_UNKNOWNMODE            "472" // :Unknown mode char
