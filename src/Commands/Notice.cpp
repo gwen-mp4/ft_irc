@@ -19,10 +19,7 @@ void Server::_handleNotice(Client *client, const std::vector<std::string> &param
     if (this->_channels.count(target) > 0)
     {
         Channel *chan = this->_channels.at(target);
-        for (size_t i = 0; i < chan->getMembers().size(); i++)
-        {
-            sendClientMessage(chan->getMembers()[i]->getClientFd(), msg);
-        }
+        chan->broadcastToChannel(client, msg, *this);
         return ;
     }
     else

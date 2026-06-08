@@ -6,7 +6,7 @@
 #    By: storck <storck@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/29 11:43:10 by gwen              #+#    #+#              #
-#    Updated: 2026/05/29 16:42:51 by storck           ###   ########.fr        #
+#    Updated: 2026/06/08 13:01:37 by storck           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,14 @@ SRC = Channel.cpp \
 	Server.cpp \
 	Command.cpp \
 	HandleCommands.cpp \
+	Commands/Invite.cpp \
 	Commands/Join.cpp \
 	Commands/Kick.cpp \
+	Commands/List.cpp \
 	Commands/Mode.cpp \
+	Commands/Names.cpp \
 	Commands/Nick.cpp \
 	Commands/Notice.cpp \
-	Commands/Oper.cpp \
 	Commands/Part.cpp \
 	Commands/Pass.cpp \
 	Commands/PrivMsg.cpp \
