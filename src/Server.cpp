@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/08 10:25:10 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/08 11:52:57 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void Server::newClient( void )
     this->_fds.push_back(newPoll);
     this->_clientNb++;
 
-    std::cout << GREEN "Client <" << inFd << "> connected" << RES << std::endl;
+    std::cout << GREEN "Client [" << inFd << "] connected" << RES << std::endl;
 }
 
 void    Server::clearBuff( void )
@@ -273,11 +273,11 @@ void    Server::clientInput( int fd )
     ssize_t bytes = recv(fd, this->_buffer, sizeof(this->_buffer) - 1, 0);
 
     if (bytes <= 0) {
-        std::cerr << RED "Client <" << fd << "> disconnected" << RES << std::endl;
+        std::cerr << RED "Client [" << fd << "] disconnected" << RES << std::endl;
         clearClient(fd, "");
     } else {
         this->_buffer[bytes] = '\0';
-        std::cout << GREEN "Client <" << fd << "> input: " << this->_buffer << RES;
+        std::cout << GREEN "Client [" << fd << "] input: " << this->_buffer << RES;
         treatCommand(this->_clients[fd], this->_buffer);
     }
 }

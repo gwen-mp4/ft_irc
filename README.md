@@ -1,5 +1,5 @@
 # **Problems**:
--If two servers with the same port connects, only one will work and the other will have leaks
+~~-If two servers with the same port connects, only one will work and the other will have leaks~~
 -Client is still in server when QUIT is called, need to SIGINT or SIGQUIT to quit or multiple input to *Ncat: Broken pipe.*
 
 LOG:
