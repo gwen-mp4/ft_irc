@@ -24,15 +24,14 @@ class Channel
         std::string             _name;
         bool                    _inviteOnly;
         bool                    _topicRestr;
-        bool                    _userLimited; // Does is it have users limit?
-        bool                    _isInvisible; // +p
         unsigned int            _limit; // +l
         std::string             _password; // +k
         std::string             _topic; // +t
         unsigned int            _nbOp;
         std::map<int, Client*>  _operators; // Using map for optimization with an int (FD) and pointer to Client
         std::map<int, Client*>  _members; // Members of a channel using their FD
-        std::set<Client*>  _invitedClients; // Set of invited clients to the channel
+        std::set<Client*>   _invitedClients; // Set of invited clients to the channel
+        std::set<char>      _modes;
 
     public:
         Channel( std::string name ); // To change with something else with constructor with parameters instead of default constructor
@@ -58,11 +57,15 @@ class Channel
         //Setter
         void    setInviteMode( bool mod ); // +i or -i
         void    setTopicRestr( bool res ); // +t or -t
-        void    setUserLimited( bool lim ); // +l or -l
-        void    setLimit( int lim ); // +l or -l
+        void    setLimit( unsigned int lim ); // +l or -l
         void    setPassword( std::string newPassW ); // +k or -k
         void    setTopic( std::string newTopic ); // TOPIC command
         void    setOperatorPrivileges(Client* oper, bool status); // +o or -o
+        void    setMode(char mode);
+
+        void    unsetLimit();
+        void    unsetPassword();
+        void    unsetMode(char mode);
 
         bool    hasMode(char mode) const;
         bool    isAlreadyInChannel(Client* client) const;

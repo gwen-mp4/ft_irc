@@ -22,12 +22,12 @@ SRC = Channel.cpp \
 	Server.cpp \
 	Command.cpp \
 	HandleCommands.cpp \
+	Commands/Invite.cpp \
 	Commands/Join.cpp \
 	Commands/Kick.cpp \
 	Commands/Mode.cpp \
 	Commands/Nick.cpp \
 	Commands/Notice.cpp \
-	Commands/Oper.cpp \
 	Commands/Part.cpp \
 	Commands/Pass.cpp \
 	Commands/PrivMsg.cpp \

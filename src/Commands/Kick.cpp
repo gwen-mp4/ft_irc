@@ -45,7 +45,7 @@ void Server::_handleKick(Client *client, const std::vector<std::string> &params)
     Client      *victim = NULL;
 
     if (this->_clientsNick.count(victim_name) == 0) {
-        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHNICK + victim_name + " * :No such nickname\r\n" RES);
+        this->sendClientMessage(client->getClientFd(), RED ":ircserv " ERR_NOSUCHNICK " " + victim_name + " * :No such nickname\r\n" RES);
         return ;
     }
     victim = this->_clientsNick.at(victim_name);
