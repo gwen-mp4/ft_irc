@@ -29,30 +29,9 @@ Server::Server( const int& port, const std::string& password) :
     _cmds["JOIN"] = &Server::_handleJoin;
     _cmds["PART"] = &Server::_handlePart;
     _cmds["TOPIC"] = &Server::_handleTopic;
-    //_cmds["KICK"] = &Server::_handleKick;
+    _cmds["KICK"] = &Server::_handleKick;
     _cmds["PRIVMSG"] = &Server::_handlePrivMsg;
     _cmds["NOTICE"] = &Server::_handleNotice;
-}
-
-Server::Server( Server const & other )
-{
-    *this = other;
-}
-
-Server& Server::operator=( Server const & other )
-{
-    if (this != &other)
-    {
-        this->_port = other._port;
-        this->_socket = other._socket;
-        this->_clients = other._clients;
-        this->_clientsNick = other._clientsNick;
-        this->_servPassword = other._servPassword;
-        this->_cmds = other._cmds;
-        this->_channels = other._channels;
-        this->_version = other._version;
-    }
-    return (*this);
 }
 
 Server::~Server( void )

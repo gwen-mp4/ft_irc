@@ -26,19 +26,6 @@ Client::Client( void ) :
     _hasGivenUser(false),
     _isAlreadyRegistered(false) {}
 
-// Client::Client( const std::string& name, const std::string& nick ) :
-//     _username(name),
-//     _nickname(nick),
-//     _realname(""),
-//     _serverName(""),
-//     _hostname(""),
-//     _clientIpAddr(""),
-//     _clientFd(-1),
-//     _isOperator(false),
-//     _hasEnteredPass(false),
-//     _hasGivenNick(false),
-//     _hasGivenUser(false) {}
-
 Client::Client( Client const & other )
 {
     *this = other;
@@ -59,6 +46,8 @@ Client& Client::operator=( Client const & other )
         this->_hasEnteredPass = other._hasEnteredPass;
         this->_hasGivenUser = other._hasGivenUser;
         this->_joinedChannels = other._joinedChannels;
+        this->_isOperator = other._isOperator;
+        this->_isAlreadyRegistered = other._isAlreadyRegistered;
     }
     return (*this);
 }
