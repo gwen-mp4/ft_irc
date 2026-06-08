@@ -48,14 +48,16 @@ class Server
         void    _handleJoin(Client* client, const std::vector<std::string>& params);
         void    _handlePart(Client* client, const std::vector<std::string>& params);
         void    _handleTopic(Client* client, const std::vector<std::string>& params);
-        //void    _handleKick(Client* client, const std::vector<std::string>& params);
+        void    _handleKick(Client* client, const std::vector<std::string>& params);
         void    _handlePrivMsg(Client* client, const std::vector<std::string>& params);
         void    _handleNotice(Client* client, const std::vector<std::string>& params);
 
-    public:
-        Server( const int& port, const std::string& password);
+        // Setting copy constructor in private so we can't instanciate it
         Server( Server const & other );
         Server& operator=( Server const & other );
+
+    public:
+        Server( const int& port, const std::string& password);
         ~Server( void );
 
         bool    validNickname(const std::string& nickname) const;

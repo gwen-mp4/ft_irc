@@ -39,8 +39,6 @@ Channel& Channel::operator=( Channel const & other )
         this->_password = other._password;
         this->_topic = other._topic;
         this->_nbOp = other._nbOp;
-        this->_operators = other._operators;
-        this->_members = other._members;
     }
     return (*this);
 }

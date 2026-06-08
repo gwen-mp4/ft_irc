@@ -23,6 +23,7 @@ SRC = Channel.cpp \
 	Command.cpp \
 	HandleCommands.cpp \
 	Commands/Join.cpp \
+	Commands/Kick.cpp \
 	Commands/Mode.cpp \
 	Commands/Nick.cpp \
 	Commands/Notice.cpp \
