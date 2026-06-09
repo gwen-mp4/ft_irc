@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Kick.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/09 11:04:41 by gwen              #+#    #+#             */
+/*   Updated: 2026/06/09 11:04:41 by gwen             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/Server.hpp"
 
 void Server::_handleKick(Client *client, const std::vector<std::string> &params) {
@@ -16,7 +28,8 @@ void Server::_handleKick(Client *client, const std::vector<std::string> &params)
         if (reason.at(0) == ':')
             reason = reason.substr(1);
         else {
-            for (size_t i = 2; i < params.size(); ++i) {
+            reason += " ";
+            for (size_t i = 3; i < params.size(); ++i) {
                 reason += params.at(i);
                 if (i + 1 < params.size())
                     reason += " ";

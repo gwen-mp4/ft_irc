@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Nick.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/09 10:58:49 by gwen              #+#    #+#             */
+/*   Updated: 2026/06/09 10:58:49 by gwen             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/Server.hpp"
 
 bool    Server::validNickname(const std::string& nickname) const {
@@ -58,7 +70,6 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     _clientsNick[nickname] = client;
     
     // If client is already registered and wants to change nickname, inform all clients of the modification
-    // It doens't seems to work, even if the client is registered and in joined channels probably, it doesn't send the message to the other clients, I don't know why
     if (client->isRegistered() && client->isAlreadyRegistered()) {
         const std::set<Channel*>& channels = client->getJoinedChannels();
         std::cout << "Passed\n";

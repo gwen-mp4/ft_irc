@@ -6,16 +6,12 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/06/09 10:37:09 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/09 11:06:08 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
-
-# ifndef BUFF_SIZE
-#  define BUFF_SIZE 1024
-# endif
 
 #include "Include.hpp"
 

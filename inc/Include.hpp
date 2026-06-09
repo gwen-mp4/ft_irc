@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Include.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:59:07 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/04 11:17:49 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 11:06:19 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,6 @@
 # ifndef PORT_MAX
 #  define PORT_MAX 65535
 # endif
-
-// # ifndef BUFF_SIZE
-// #  define BUFF_SIZE 1024
-// # endif
 
 # define RED "\033[31m"
 # define GREEN "\033[32m"

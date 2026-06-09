@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/09 10:51:27 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/09 10:55:12 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,9 +147,7 @@ void Server::newClient( void )
 
     cl->setClientFd(inFd);
     cl->setClientIP(inet_ntoa(clientAddr.sin_addr));
-    //this->_clients[this->_clients.size()] = &cl;
     this->_clients.insert(std::pair<int, Client*>(inFd, cl));
-    //this->_fds[this->_clientNb] = newPoll;
     this->_fds.push_back(newPoll);
     this->_clientNb++;
 
@@ -164,8 +162,7 @@ void    Server::clearBuff( void )
     }
 }
 
-void    Server::clearClient( int fd, std::string reason )
-{
+void    Server::clearClient( int fd, std::string reason ) {
     std::map<int, Client*>::iterator cit = this->_clients.find(fd);
     if (cit == this->_clients.end())
         return;
@@ -255,11 +252,9 @@ void    Server::run( void )
 
     if (bind(this->_socket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
     {
-        //std::cout << RED << "Port is already in use." << RES << std::endl;
         close(this->_socket);
         std::string msg = RED "Port is already in use." RES;
         throw std::runtime_error(msg);
-        //return ;
     }
 
     reServSock = listen(this->_socket, 32);
@@ -271,14 +266,10 @@ void    Server::run( void )
 	newCli.revents = 0;
 	this->_fds.push_back(newCli);
 
-    // this->_fds[0].fd = this->_socket;
-    // this->_fds[0].events = POLLIN;
-
     do {
         signal(SIGINT, Server::signalHandler);
 		signal(SIGQUIT, Server::signalHandler);
         signal(SIGTSTP, Server::signalHandler);
-        //std::cout << "Waiting on poll()..." << std::endl;
         reServSock = poll(&_fds[0], _fds.size(), -1);
 
         if (reServSock == -1) {

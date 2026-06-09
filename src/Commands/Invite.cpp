@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Invite.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/09 11:05:26 by gwen              #+#    #+#             */
+/*   Updated: 2026/06/09 11:05:27 by gwen             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/Server.hpp"
 
 void Server::_handleInvite(Client *client, const std::vector<std::string> &params) {
@@ -9,8 +21,8 @@ void Server::_handleInvite(Client *client, const std::vector<std::string> &param
 
     std::string target_nick = params.at(0);
     std::string chan_name = params.at(1);
-    Client  *target;
-    Channel *chan;
+    Client  *target = NULL;
+    Channel *chan = NULL;
 
     if (this->_clientsNick.count(target_nick) == 0)
     {
