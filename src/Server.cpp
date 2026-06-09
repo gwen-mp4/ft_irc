@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/08 11:52:57 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 10:14:07 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,9 +227,16 @@ void    Server::clientInput( int fd )
         std::cerr << RED "Client [" << fd << "] disconnected" << RES << std::endl;
         clearClient(fd, "");
     } else {
+        Client  *cli = this->_clients.at(fd);
         this->_buffer[bytes] = '\0';
-        std::cout << GREEN "Client [" << fd << "] input: " << this->_buffer << RES;
-        treatCommand(this->_clients[fd], this->_buffer);
+        cli->setCliBuff(cli->getCliBuff() + this->_buffer);
+
+        if (cli->getCliBuff().find("\n") != std::string::npos)
+        {
+            std::cout << GREEN "Client [" << fd << "] input: " << cli->getCliBuff() << RES;
+            treatCommand(this->_clients[fd], cli->getCliBuff());
+            cli->setCliBuff("");
+        }
     }
 }
 
@@ -267,7 +274,7 @@ void    Server::run( void )
     do {
         signal(SIGINT, Server::signalHandler);
 		signal(SIGQUIT, Server::signalHandler);
-        std::cout << "Waiting on poll()..." << std::endl;
+        //std::cout << "Waiting on poll()..." << std::endl;
         reServSock = poll(&_fds[0], _fds.size(), -1);
 
         if (reServSock == -1) {

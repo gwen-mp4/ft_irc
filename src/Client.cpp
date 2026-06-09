@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/04 11:51:38 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 10:05:02 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,10 @@ bool Client::isAlreadyRegistered() const {
     return _isAlreadyRegistered;
 }
 
+std::string Client::getCliBuff() const {
+    return _cliBuff;
+}
+
 /* ---------- Setter ---------- */
 
 void    Client::setUsername( const std::string& username )
@@ -171,6 +175,10 @@ void Client::setIsAlreadyRegistered(bool status) {
 
 void Client::setIsOperator(bool status) {
     this->_isOperator = status;
+}
+
+void Client::setCliBuff(std::string buff) {
+    this->_cliBuff = buff;
 }
 
 void    Client::addChannel(Channel* channel) {
