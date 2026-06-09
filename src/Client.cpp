@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:51:59 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/09 10:05:02 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 10:42:16 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ Client::Client( void ) :
     _hostname(""),
     _clientIpAddr(""),
     _clientFd(-1),
-    _isOperator(false),
     _hasEnteredPass(false),
     _hasGivenNick(false),
     _hasGivenUser(false),
-    _isAlreadyRegistered(false) {}
+    _isAlreadyRegistered(false),
+    _cliBuff("") {}
 
 Client::Client( Client const & other ) {
     *this = other;
@@ -45,7 +45,6 @@ Client& Client::operator=( Client const & other )
         this->_hasEnteredPass = other._hasEnteredPass;
         this->_hasGivenUser = other._hasGivenUser;
         this->_joinedChannels = other._joinedChannels;
-        this->_isOperator = other._isOperator;
         this->_isAlreadyRegistered = other._isAlreadyRegistered;
     }
     return (*this);
@@ -55,7 +54,6 @@ Client::~Client( void )
 {
     std::cout << "Client " << this->_clientFd << " destroyed" << std::endl;
 }
-
 
 /* ---------- Getter ---------- */
 
@@ -93,10 +91,6 @@ int         Client::getClientFd( void ) const
 
 const std::set<Channel*>&  Client::getJoinedChannels() const {
     return this->_joinedChannels;
-}
-
-bool    Client::isOperator() const {
-    return this->_isOperator;
 }
 
 bool Client::hasSentNick() const {
@@ -171,10 +165,6 @@ void Client::setSentUser(bool status) {
 
 void Client::setIsAlreadyRegistered(bool status) {
     this->_isAlreadyRegistered = status;
-}
-
-void Client::setIsOperator(bool status) {
-    this->_isOperator = status;
 }
 
 void Client::setCliBuff(std::string buff) {

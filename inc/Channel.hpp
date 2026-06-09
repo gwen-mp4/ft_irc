@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:05 by storck            #+#    #+#             */
-/*   Updated: 2026/06/05 11:41:46 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 10:38:26 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Channel
         std::set<char>      _modes;
 
     public:
-        Channel( std::string name ); // To change with something else with constructor with parameters instead of default constructor
+        Channel( std::string name );
         Channel( Channel const & other );
         Channel& operator=( Channel const & other );
         ~Channel( void );
@@ -49,8 +49,6 @@ class Channel
         bool    hasClient(Client* client) const;
 
         //Setter
-        void    setInviteMode( bool mod ); // +i or -i
-        void    setTopicRestr( bool res ); // +t or -t
         void    setLimit( unsigned int lim ); // +l or -l
         void    setPassword( std::string newPassW ); // +k or -k
         void    setTopic( std::string newTopic ); // TOPIC command
@@ -69,7 +67,6 @@ class Channel
         bool    isFull() const;
         bool    isEmpty() const;
         bool    isPasswordProtected() const;
-        bool    isTopicRestricted() const;
 
         void    addOperators(Client* newOper);
         void    addMembers(Client* newMember);
