@@ -1,50 +1,58 @@
-# **Problems**:
-~~-If two servers with the same port connects, only one will work and the other will have leaks~~
--Client is still in server when QUIT is called, need to SIGINT or SIGQUIT to quit or multiple input to *Ncat: Broken pipe.*
+*This project has been created as part of the 42 curriculum by gwen, storck.*
 
-LOG:
+## Description:
 
-*29/05 16:20 by gwen*:
--Makefile okay
--Did all the init for class variables
--Port parsing work
+The objective of this project is to develop an IRC server using the C++ 98 standard.
 
-*01/06 16:20 by gwen*:
--Added Command class for parsing (work)
--Added pointer function in server for command
--Added IRC server code
--Working on pre command handling
+The server must be capable of handling multiple clients simultaneously without hanging.
 
-*02/06 14:00 by gwen*:
--Need to connect everything together (client information sending to command parsing and then command handling)
--Need to add signals
+Forking is prohibited. All I/O operations must be non-blocking.
+
+Only 1 poll() (or equivalent) can be used for handling all these operations (read, write, but also listen, and so forth)
+
+Only the following features must be implemented:
+        -It must be able to authenticate, set a nickname, a username, join a channel, send and receive private messages using your reference client.
+        -All the messages sent from one client to a channel have to be forwarded to every other client that joined the channel.
+        -It must have operators and regular users.
+        -Then, it has to implement the commands that are specific to channel operators:
+                KICK: Eject a client from the channel
+                INVITE: Invite a client to the channel
+                TOPIC: Change or view the channel topic
+                MODE: Change the channel mode:
+                        i: set/remove Invite-only channel
+                        t: set/remove the restrictions of the TOPIC command to channel operators
+                        k: set/remove the channel key (password)
+                        o: give/take channel operator privilege
+                        l: set/remove the user limit to channel
+
+## Instructions:
+
+compile with: make
+
+delete .o files with: make clean
+
+delete .o files and executable with: make fclean
+
+recompile with: make re
 
 
-*03/06 14:00 by storck*:
--IRC server can succesfully be started, accept client and handel client input.
--Launch the program, then in another terminal, type :> nc localhost [port #]. Then have fun sending messages to server.
+launche the server with: ./irserv [port] [password]
 
-TODO:   Cleanly destroy a client when it disconnects.
-        Manage client input as commands, right now it is only a string displayed by the server.
+connect to the server with: nc localhost [port]
 
-*03/06 14:10 by gwen*:
--Coded password and nickname handlers, have to test
+or with IRC client irssi by doing:
+irssi
+/connect localhost [port]
 
-## (for storck)
--If you can, create the function to send message to client asap so I will be able to test and correct it early
+## Ressources:
 
-*04/06 17:00 by gwen*:
--Connection works, need to properly destroy everything the client has when he disconnects, otherwise the server will remember it and some commands may no work such as USER
--Command USER, NICK and PASS works (need to add disconnect function in PASS if it's pass wrong)
--Added welcome code
+This page was used to understand how to set up the server with the proper protocol and use poll() to accept and recieve client input:
+https://www.ibm.com/docs/fr/i/7.5.0?topic=designs-using-poll-instead-select
 
-*05/06 12:30 by gwen*:
--Added JOIN command, FINALLY IT WORKS!!! (no leaks and FDs leaks for now)
+This git repository was used to understand the behaviour of IRC commands:
+https://gist.github.com/im-portthis/995254f6405c0b2c297eb38201cdb9ca
 
-*07/06 15:00 by gwen*:
--Updated *_handleJoin()*, now it disconnects client if password is invalid
--Updated *Server::run()*, now it handles correctly signals (SIGINT/SIGQUIT) cleared everything correctly
--Updated *Server::clearClient()*, it clears everything (FD, client, channels, operator and member)
--Recoded *_handleQuit()* and *_handlePart*
--Now **QUIT** and **PART** works perfectly (normally) (and except that QUIT doesn't quit completly the prompt but it does disconnect)
--Fixed all segfaults, leaks and FDs leaks due to server SIGINT and/or client SIGINT
+As well as the following page:
+https://www.mirc.com/help/html/index.html?basic_irc_commands.html
+
+LLMs where used to help with debug.
