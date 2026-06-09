@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/09 10:14:07 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 10:43:54 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,8 @@ void    Server::clientInput( int fd )
         {
             std::cout << GREEN "Client [" << fd << "] input: " << cli->getCliBuff() << RES;
             treatCommand(this->_clients[fd], cli->getCliBuff());
-            cli->setCliBuff("");
+            if (_clients.find(fd) != _clients.end())
+                cli->setCliBuff("");
         }
     }
 }

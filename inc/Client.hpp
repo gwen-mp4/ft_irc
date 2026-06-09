@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 12:41:12 by storck            #+#    #+#             */
-/*   Updated: 2026/06/09 10:04:19 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 10:37:09 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ class Client
         int         _clientFd;
 
         std::set<Channel*>  _joinedChannels;
-        
-        bool    _isOperator;
 
         bool    _hasEnteredPass;
         bool    _hasGivenNick;
@@ -43,7 +41,6 @@ class Client
 
     public:
         Client( void );
-        //Client( const std::string& name, const std::string& nick );
         Client( Client const & other );
         Client& operator=( Client const & other );
         ~Client( void );
@@ -57,7 +54,6 @@ class Client
         std::string getclientIP( void ) const;
         int getClientFd( void ) const;
         const std::set<Channel*>&  getJoinedChannels() const;
-        bool    isOperator() const;
         bool    hasSentNick() const;
         bool    hasSentPass() const;
         bool    hasSentUser() const;
@@ -77,7 +73,6 @@ class Client
         void    setSentNick(bool status);
         void    setSentUser(bool status);
         void    setIsAlreadyRegistered(bool status);
-        void    setIsOperator(bool status);
         void    setCliBuff(std::string buff);
 
         void    addChannel(Channel* channel);

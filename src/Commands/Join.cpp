@@ -26,8 +26,6 @@ void Server::_handleJoin(Client *client, const std::vector<std::string> &params)
             chan = new Channel(name);
             _channels[name] = chan;
             chan->addOperators(client);
-            if (!client->isOperator())
-                client->setIsOperator(true);
         } else {
             chan = _channels[name];
             if (chan->isAlreadyInChannel(client)) {
