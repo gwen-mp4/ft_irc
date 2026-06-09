@@ -6,7 +6,7 @@
 /*   By: gwen <gwen@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/09 10:58:49 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/09 10:58:49 by gwen             ###   ########.fr       */
+/*   Updated: 2026/06/09 11:57:00 by gwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,10 @@ void Server::_handleNick(Client *client, const std::vector<std::string> &params)
     // If client is already registered and wants to change nickname, inform all clients of the modification
     if (client->isRegistered() && client->isAlreadyRegistered()) {
         const std::set<Channel*>& channels = client->getJoinedChannels();
-        std::cout << "Passed\n";
         if (!channels.empty()) {
-            std::cout << "Passed joined channels\n";
             std::string msg = BBLU ":" + oldNickname + " NICK :" + nickname + "\r\n" RES;
             for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
                 (*it)->broadcastToChannel(client, msg, *this);
-                std::cout << "Passed broadcast\n";
-                if (*it == NULL)
-                    std::cout << "Joined channel is NULL\n";
             }
         }
     }
