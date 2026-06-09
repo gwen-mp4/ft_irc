@@ -6,7 +6,7 @@
 /*   By: storck <storck@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/29 11:52:08 by gwen              #+#    #+#             */
-/*   Updated: 2026/06/09 10:14:07 by storck           ###   ########.fr       */
+/*   Updated: 2026/06/09 10:33:06 by storck           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,9 +254,11 @@ void    Server::run( void )
 
     if (bind(this->_socket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
     {
-        std::cout << RED << "Port is already in use." << RES << std::endl;
+        //std::cout << RED << "Port is already in use." << RES << std::endl;
         close(this->_socket);
-        return ;
+        std::string msg = RED "Port is already in use." RES;
+        throw std::runtime_error(msg);
+        //return ;
     }
 
     reServSock = listen(this->_socket, 32);
@@ -274,6 +276,7 @@ void    Server::run( void )
     do {
         signal(SIGINT, Server::signalHandler);
 		signal(SIGQUIT, Server::signalHandler);
+        signal(SIGTSTP, Server::signalHandler);
         //std::cout << "Waiting on poll()..." << std::endl;
         reServSock = poll(&_fds[0], _fds.size(), -1);
 
